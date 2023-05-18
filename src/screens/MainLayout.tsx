@@ -7,22 +7,26 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
 
-const MainLayout = () => {
+interface Props {
+  navigation: any;
+}
+
+const MainLayout = ({navigation: rootNavigation}: Props) => {
   return (
     <Tab.Navigator initialRouteName={"Subscribed"} screenOptions={{ tabBarShowLabel: false, headerShown: false }}>
-      <Tab.Screen name={"Subscribed"} component={SubscribedScreen} options={{
+      <Tab.Screen name={"Subscribed"} children={({navigation}) => <SubscribedScreen navigation={navigation} rootNavigation={rootNavigation} />} options={{
         tabBarIcon: ({ focused }) => focused ?
           <WithLocalSvg asset={require("../assets/icons/ic_selected_subscribed.svg")} width={32} height={32} />
           :
           <WithLocalSvg asset={require("../assets/icons/ic_subscribed.svg")} width={32} height={32} />
       }} />
-      <Tab.Screen name={"My Clubs"} component={MyClubsScreen} options={{
+      <Tab.Screen name={"My Clubs"} children={({navigation}) => <MyClubsScreen navigation={navigation} rootNavigation={rootNavigation} />} options={{
         tabBarIcon: ({ focused }) => focused ?
           <WithLocalSvg asset={require("../assets/icons/ic_selected_myclubs.svg")} width={32} height={32} />
           :
           <WithLocalSvg asset={require("../assets/icons/ic_myclubs.svg")} width={32} height={32} />
       }} />
-      <Tab.Screen name={"Calendar"} component={CalendarScreen} options={{
+      <Tab.Screen name={"Calendar"} children={({navigation}) => <CalendarScreen navigation={navigation} rootNavigation={rootNavigation} />} options={{
         tabBarIcon: ({ focused }) => focused ?
           <WithLocalSvg asset={require("../assets/icons/ic_selected_calendar.svg")} width={32} height={32} />
           :

@@ -2,10 +2,11 @@ import React from "react";
 import { Text } from "react-native";
 
 interface Props {
-  navigation: any
+  navigation: any;
+  rootNavigation: any;
 }
 
-const MyClubsScreen = ({ navigation }: Props) => {
+const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
   return (
     <Text>
       My clubs

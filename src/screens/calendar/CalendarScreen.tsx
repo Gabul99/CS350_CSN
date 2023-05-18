@@ -2,7 +2,8 @@ import React from "react";
 import { Text } from "react-native";
 
 interface Props {
-  navigation: any
+  navigation: any;
+  rootNavigation: any;
 }
 
 const CalendarScreen = ({ navigation }: Props) => {

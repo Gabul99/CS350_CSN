@@ -3,9 +3,10 @@ import { Text, View } from "react-native";
 
 interface Props {
   navigation: any;
+  rootNavigation: any;
 }
 
-const SubscribedScreen = ({ navigation }: Props) => {
+const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
   return (
     <View>
       <Text>
