@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View } from "react-native";
+import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
 
 interface Props {
   navigation: any;
@@ -9,6 +10,7 @@ interface Props {
 const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
   return (
     <View>
+      <SubscribeTopBar />
       <Text>
         Subscribed
       </Text>
