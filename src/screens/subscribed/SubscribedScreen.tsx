@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
+import FeedPost from "../../components/core/FeedPost";
 
 interface Props {
   navigation: any;
@@ -11,9 +12,7 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
   return (
     <View>
       <SubscribeTopBar />
-      <Text>
-        Subscribed
-      </Text>
+      <FeedPost />
     </View>
   );
 };

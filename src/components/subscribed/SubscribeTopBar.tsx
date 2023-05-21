@@ -22,7 +22,7 @@ const Icons = styled.View`
 
 const Title = styled.Text`
   font-family: 'Helvetica Neue';
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
   margin-right: auto;
 `;
