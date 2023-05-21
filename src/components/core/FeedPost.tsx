@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "./CSText";
 import ImageSliderView from "./ImageSlider";
+import { Colors } from "../../style/Colors";
 
 const Container = styled.View`
   width: 100%;
@@ -45,12 +46,12 @@ const FeedPost = () => {
       <Header>
         <ImagePlace />
         <PostInfoArea>
-          <CSText fontType={FontType.REGULAR} color={"black"} fontSize={14}>KAIST Puple</CSText>
-          <CSText fontType={FontType.REGULAR} color={"#97AAAD"} fontSize={14}>11 min ago</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>KAIST Puple</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>
         </PostInfoArea>
       </Header>
       <PostDescriptionArea>
-      <CSText fontType={FontType.REGULAR} color={"black"} fontSize={14}>Lorem ipsum dolor sit amet, consectetur
+      <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet, consectetur
         adipiscing elit. Donec at risus et lorem tincidunt</CSText>
       </PostDescriptionArea>
       <ImageSliderView />

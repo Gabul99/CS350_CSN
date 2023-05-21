@@ -21,11 +21,10 @@ interface Props {
 }
 
 const CSText = ({fontType, color, fontSize, children}: Props) => {
-
   const getFontWeight = (type: FontType) => {
     switch (type) {
       case FontType.BOLD:
-        return '600';
+        return '700';
       case FontType.REGULAR:
         return '500';
     }

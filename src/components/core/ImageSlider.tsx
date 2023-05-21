@@ -3,6 +3,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import styled from "styled-components/native";
 import { useState } from "react";
 import CSText, { FontType } from "./CSText";
+import { Colors } from "../../style/Colors";
 
 const SliderContainer = styled.View`
   position: relative;
@@ -32,7 +33,7 @@ const ImageSliderView = () => {
       <SliderBox images={images} resizeMode={"contain"} ImageComponentStyle={{ height: "100%" }}
                  currentImageEmitter={(index: number) => setCurrentIndex(index)} dotStyle={{width: 0, height: 0}} />
       <IndicatorContainer>
-        <CSText fontType={FontType.REGULAR} color={'white'} fontSize={14}>
+        <CSText fontType={FontType.REGULAR} color={Colors.WHITE100} fontSize={14}>
           {`${currentIndex + 1}/${images.length}`}
         </CSText>
       </IndicatorContainer>
