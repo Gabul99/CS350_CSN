@@ -27,7 +27,7 @@ const ImagePlace = styled.View`
   width: 32px;
   height: 32px;
   background-color: lightgray;
-  border-radius: 50%;
+  border-radius: 16px;
   overflow: hidden;
 `;
 
