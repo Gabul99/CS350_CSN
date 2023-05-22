@@ -5,6 +5,7 @@ import FeedPost from "../../components/core/FeedPost";
 import styled from "styled-components/native";
 import Empty from "../../components/subscribed/Empty";
 import { Colors } from "../../style/Colors";
+import ClubList from "./ClubList";
 
 export enum SubscribedState {
   FEED,
@@ -55,7 +56,7 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
       </>
       }
       {state !== SubscribedState.FEED &&
-        <Text>hi</Text>
+        <ClubList />
       }
     </Container>
   );
