@@ -57,7 +57,9 @@ const SubscribeTopBar = ({ state, setState, searchKeyword, setSearchKeyword }: P
       <>
         <Title>Subscribed</Title>
         <Icons>
+          <TouchableOpacity onPress={() => setState(SubscribedState.NAVIGATE)}>
           <WithLocalSvg asset={require("../../assets/icons/ic_explore.svg")} width={28} height={28} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => setState(SubscribedState.SEARCH)}>
             <WithLocalSvg asset={require("../../assets/icons/ic_search.svg")} width={28} height={28} />
           </TouchableOpacity>
@@ -65,7 +67,16 @@ const SubscribeTopBar = ({ state, setState, searchKeyword, setSearchKeyword }: P
       </>
       }
       {state === SubscribedState.SEARCH &&
-      <SearchBar searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} onBack={() => setState(SubscribedState.FEED)} />
+      <SearchBar searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword}
+                 onBack={() => setState(SubscribedState.FEED)} />
+      }
+      {state === SubscribedState.NAVIGATE &&
+      <SearchContainer>
+        <TouchableOpacity onPress={() => setState(SubscribedState.FEED)}>
+          <WithLocalSvg asset={require("../../assets/icons/ic_arrow_back.svg")} width={24} height={24} />
+        </TouchableOpacity>
+        <Title>Navigate Clubs</Title>
+      </SearchContainer>
       }
     </Container>
   );
@@ -80,9 +91,9 @@ interface SearchProps {
 const SearchBar = ({ searchKeyword, setSearchKeyword, onBack }: SearchProps) => {
   return <SearchContainer>
     <TouchableOpacity onPress={onBack}>
-    <WithLocalSvg asset={require("../../assets/icons/ic_arrow_back.svg")} width={24} height={24} />
+      <WithLocalSvg asset={require("../../assets/icons/ic_arrow_back.svg")} width={24} height={24} />
     </TouchableOpacity>
-    <SearchTextInput value={searchKeyword} onChangeText={setSearchKeyword} placeholder={'Search ...'} />
+    <SearchTextInput value={searchKeyword} onChangeText={setSearchKeyword} placeholder={"Search ..."} />
     <WithLocalSvg asset={require("../../assets/icons/ic_search.svg")} width={28} height={28} />
   </SearchContainer>;
 };
