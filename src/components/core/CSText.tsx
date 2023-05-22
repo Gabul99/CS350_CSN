@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import { ReactElement, ReactNode } from "react";
+import { Colors } from "../../style/Colors";
 
 export enum FontType {
   BOLD,
@@ -15,12 +16,12 @@ const StyledText = styled.Text<{size: string, fontWeight: string, color: string}
 
 interface Props {
   fontType: FontType;
-  color: string;
+  color?: string;
   fontSize: number;
   children: ReactNode;
 }
 
-const CSText = ({fontType, color, fontSize, children}: Props) => {
+const CSText = ({fontType, color = Colors.BLACK100, fontSize, children}: Props) => {
   const getFontWeight = (type: FontType) => {
     switch (type) {
       case FontType.BOLD:
