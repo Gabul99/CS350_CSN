@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
 import FeedPost from "../../components/core/FeedPost";
 import styled from "styled-components/native";
 import Empty from "../../components/subscribed/Empty";
 import { Colors } from "../../style/Colors";
+
+export enum SubscribedState {
+  FEED,
+  SEARCH,
+  NAVIGATE,
+}
 
 interface Props {
   navigation: any;
@@ -29,17 +35,28 @@ const ScrollArea = styled.ScrollView`
 `;
 
 const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
+  const [state, setState] = useState<SubscribedState>(SubscribedState.FEED);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
   return (
     <Container>
-      <SubscribeTopBar />
-      <Content>
-        <Empty />
-      </Content>
-      {/*<ScrollArea contentContainerStyle={{rowGap: 6}}>*/}
-      {/*  <FeedPost />*/}
-      {/*  <FeedPost />*/}
-      {/*  <FeedPost />*/}
-      {/*</ScrollArea>*/}
+      <SubscribeTopBar state={state} setState={setState} searchKeyword={searchKeyword}
+                       setSearchKeyword={setSearchKeyword} />
+      {state === SubscribedState.FEED &&
+      <>
+        <Content>
+          <Empty />
+        </Content>
+        {/*<ScrollArea contentContainerStyle={{rowGap: 6}}>*/}
+        {/*  <FeedPost />*/}
+        {/*  <FeedPost />*/}
+        {/*  <FeedPost />*/}
+        {/*</ScrollArea>*/}
+      </>
+      }
+      {state !== SubscribedState.FEED &&
+        <Text>hi</Text>
+      }
     </Container>
   );
 };
