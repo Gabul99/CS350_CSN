@@ -5,12 +5,12 @@ import { View } from "react-native";
 
 const Container = styled.View`
   width: 100%;
-  height: 66px;
+  height: 44px;
   display: flex;
   flex-direction: row;
   background-color: white;
   align-items: center;
-  padding: 0 28px;
+  padding: 0 16px;
 `;
 
 const Icons = styled.View`
@@ -32,8 +32,8 @@ const SubscribeTopBar = () => {
     <Container>
       <Title>Subscribed</Title>
       <Icons>
-        <WithLocalSvg asset={require("../../assets/icons/ic_explore.svg")} width={32} height={32} />
-        <WithLocalSvg asset={require("../../assets/icons/ic_search.svg")} width={32} height={32} />
+        <WithLocalSvg asset={require("../../assets/icons/ic_explore.svg")} width={28} height={28} />
+        <WithLocalSvg asset={require("../../assets/icons/ic_search.svg")} width={28} height={28} />
       </Icons>
     </Container>
   );
