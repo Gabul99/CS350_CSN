@@ -5,6 +5,7 @@ import { Colors } from "../../style/Colors";
 export enum FontType {
   BOLD,
   REGULAR,
+  MEDIUM,
 }
 
 const StyledText = styled.Text<{size: string, fontWeight: string, color: string}>`
@@ -26,8 +27,10 @@ const CSText = ({fontType, color = Colors.BLACK100, fontSize, children}: Props) 
     switch (type) {
       case FontType.BOLD:
         return '700';
-      case FontType.REGULAR:
+      case FontType.MEDIUM:
         return '500';
+      case FontType.REGULAR:
+        return '400';
     }
   }
 
