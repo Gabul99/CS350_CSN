@@ -2,8 +2,9 @@ import styled from "styled-components/native";
 import CSText, { FontType } from "./CSText";
 import { Colors } from "../../style/Colors";
 import { ReactElement, ReactNode } from "react";
+import { TouchableOpacityProps } from 'react-native';
 
-const StyledButton = styled.View`
+const StyledButton = styled.TouchableOpacity`
   display: flex;
   align-items: center;
   justify-contents: center;
@@ -13,7 +14,7 @@ const StyledButton = styled.View`
   flex-grow: 1;
 `;
 
-interface Props {
+interface Props extends TouchableOpacityProps{
   size?: string;
   fill?: boolean;
   color: string;
@@ -21,7 +22,7 @@ interface Props {
   children?: ReactNode;
 }
 
-const CSButton = ({size = 'SMALL', fill = false, color, text, children}: Props) => {
+const CSButton = ({size = 'SMALL', fill = false, color, text, children, onPress, ...props}: Props) => {
   const getFillColor = (fill: boolean, color: string) => {
     if(fill) return color;
     return Colors.WHITE100;
@@ -48,7 +49,7 @@ const CSButton = ({size = 'SMALL', fill = false, color, text, children}: Props) 
         return Colors.GREEN_DARK;
     }
   }
-  return <StyledButton style={{borderColor: getStrokeColor(fill, color), backgroundColor: getFillColor(fill, color)}}>
+  return <StyledButton style={{borderColor: getStrokeColor(fill, color), backgroundColor: getFillColor(fill, color)}} onPress={onPress}>
       <CSText fontType={FontType.MEDIUM} color={getFontColor(fill, color)} fontSize={14}>{text}</CSText>
       {children}
     </StyledButton>

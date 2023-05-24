@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
@@ -50,6 +50,17 @@ const DetailDescriptionArea = styled.View`
 
 
 const ClubDetailBar = () => {
+  const [subscribed, setSubscribed] = useState(false);
+  const [joined, setJoin] = useState(2);
+  // 0: cannot join 1: Joined 2: Joinable 3: Applied
+
+  const handleSubsButtonPress = () => {
+    setSubscribed(!subscribed);
+  };
+  const handleJoinButtonPress = () => {
+    if(joined == 2) setJoin(3);
+  };
+
   return (
     <Container>
       <Header>
@@ -58,8 +69,18 @@ const ClubDetailBar = () => {
           <CSText fontType={FontType.BOLD} color={Colors.BLACK100} fontSize={24}>KAIST Puple</CSText>
           <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>87 members</CSText>
           <ClubButtonArea>
-            <CSButton color={Colors.GREEN_BACKGROUND} text={"Cannot Join"}></CSButton>
-            <CSButton fill={true} color={Colors.GREEN_DEEP} text={"Subscribe"}></CSButton>
+            <CSButton 
+              fill={joined==2}
+              color={joined==1?Colors.GREEN_DEEP:joined==2?Colors.GREEN_DEEP:Colors.GREEN_BACKGROUND}
+              text={joined==0?"Cannot Join":joined==1?"Joined":joined==2?"Join":"Applied"}
+              onPress={handleJoinButtonPress}
+            ></CSButton>
+            <CSButton 
+              fill={!subscribed}
+              color={Colors.GREEN_DEEP}
+              text={subscribed?"Subscribed" : "Subscribe"}
+              onPress={handleSubsButtonPress}
+            ></CSButton>
           </ClubButtonArea>
         </ClubInfoArea>
       </Header>
