@@ -36,6 +36,11 @@ const PostInfoArea = styled.View`
   flex-direction: column;
 `;
 
+const TouchablePostDescriptionArea = styled.TouchableOpacity`
+  width: 100%;
+  padding: 0 18px 12px 18px;
+`;
+
 const PostDescriptionArea = styled.View`
   width: 100%;
   padding: 0 18px 12px 18px;
@@ -57,7 +62,11 @@ const SmallButton = styled.View`
   gap: 4px;
 `;
 
-const FeedPost = () => {
+interface Props {
+  rootNavigation?: any;
+}
+
+const FeedPost = ({ rootNavigation }: Props) => {
   return (
     <Container>
       <Header>
@@ -67,11 +76,21 @@ const FeedPost = () => {
           <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>
         </PostInfoArea>
       </Header>
-      <PostDescriptionArea>
-        <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet,
-          consectetur
-          adipiscing elit. Donec at risus et lorem tincidunt</CSText>
-      </PostDescriptionArea>
+      {!!rootNavigation ?
+        <TouchablePostDescriptionArea onPress={() => {
+          if (rootNavigation) rootNavigation.navigate("PostDetail");
+        }}>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet,
+            consectetur
+            adipiscing elit. Donec at risus et lorem tincidunt</CSText>
+        </TouchablePostDescriptionArea>
+        :
+        <PostDescriptionArea>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet,
+            consectetur
+            adipiscing elit. Donec at risus et lorem tincidunt</CSText>
+        </PostDescriptionArea>
+      }
       <ImageSliderView />
       <LikeCommentBar>
         <SmallButton>
