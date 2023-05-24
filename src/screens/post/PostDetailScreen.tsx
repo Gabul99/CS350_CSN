@@ -5,6 +5,7 @@ import { WithLocalSvg } from "react-native-svg";
 import { ScrollView, TouchableOpacity } from "react-native";
 import CSText, { FontType } from "../../components/core/CSText";
 import FeedPost from "../../components/core/FeedPost";
+import Comment from "../../components/post/Comment";
 
 const Container = styled.View`
   width: 100%;
@@ -29,7 +30,6 @@ const ScrollArea = styled.ScrollView`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   width: 100%;
 `;
 
@@ -48,8 +48,9 @@ const PostDetailScreen = ({ navigation }: Props) => {
           Post
         </CSText>
       </TopBarContainer>
-      <ScrollArea>
+      <ScrollArea contentContainerStyle={{rowGap: 8}}>
         <FeedPost />
+        <Comment />
       </ScrollArea>
     </Container>
   );
