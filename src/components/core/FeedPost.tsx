@@ -55,7 +55,7 @@ const LikeCommentBar = styled.View`
   gap: 8px;
 `;
 
-const SmallButton = styled.View`
+const SmallButton = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   align-items: center;

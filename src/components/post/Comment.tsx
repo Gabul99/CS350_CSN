@@ -43,7 +43,7 @@ const Comment = () => {
         </CSText>
         {isMyComment &&
         <DeleteIcon>
-          <WithLocalSvg asset={require("../../assets/icons/ic_delete.svg")} width={24} height={24} />
+          <WithLocalSvg asset={require("../../assets/icons/ic_delete.svg")} width={20} height={20} />
         </DeleteIcon>
         }
       </InfoBar>
