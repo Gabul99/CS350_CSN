@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { ScrollView, Text } from "react-native";
 import { Colors } from "../../style/Colors";
+import CircularClubBadge from "./CircularClubBadge";
 
 const ScrollContainer = styled.View`
   width: 100%;
@@ -21,10 +22,18 @@ const Container = styled.View`
 const ClubSelectBar = () => {
   return (
     <ScrollContainer>
-      <ScrollView horizontal>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Container>
-          <Text>hi</Text>
-          <Text>hi</Text>
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
+          <CircularClubBadge />
         </Container>
       </ScrollView>
     </ScrollContainer>
