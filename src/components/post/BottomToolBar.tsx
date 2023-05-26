@@ -1,9 +1,10 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import styled from "styled-components/native";
 import { WithLocalSvg } from "react-native-svg";
 import { TouchableOpacity, View } from "react-native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
+import { launchImageLibrary } from "react-native-image-picker";
 
 const Container = styled.View`
   height: 72px;
@@ -26,12 +27,16 @@ const PublicButtonArea = styled.TouchableOpacity`
 interface Props {
   isPublic: boolean;
   setPublic: (value: boolean) => void;
+  imageList: string[];
+  setImageList: (value: string[]) => void;
 }
 
-const BottomToolBar = ({ isPublic, setPublic }: Props) => {
+const BottomToolBar = ({ isPublic, setPublic, imageList, setImageList }: Props) => {
   return (
     <Container>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        launchImageLibrary({mediaType: 'photo'}, res => setImageList(imageList.concat((res.assets ?? []).map(asset => asset.uri ?? ''))));
+      }}>
         <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={32} height={32} />
       </TouchableOpacity>
       <PublicButtonArea onPress={() => setPublic(!isPublic)}>

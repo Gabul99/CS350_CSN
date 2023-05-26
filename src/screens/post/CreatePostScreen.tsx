@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../../components/core/CSText";
 import { WithLocalSvg } from "react-native-svg";
-import { TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import BottomToolBar from "../../components/post/BottomToolBar";
 import CsDropdown from "../../components/core/CSDropdown";
 
@@ -52,6 +52,7 @@ interface Props {
 const CreatePostScreen = ({ navigation }: Props) => {
   const [isPublic, setPublic] = useState<boolean>(true);
   const [contentText, setContentText] = useState<string>('');
+  const [imageList, setImageList] = useState<string[]>([]);
 
   return (
     <Container>
@@ -72,9 +73,12 @@ const CreatePostScreen = ({ navigation }: Props) => {
             Content
           </CSText>
           <TextArea value={contentText} onChangeText={text => setContentText(text)} multiline={true} style={{padding: 8}} />
+          <ScrollView horizontal contentContainerStyle={{columnGap: 8}}>
+            {imageList.map(imageUri => <Image source={{uri: imageUri}} style={{ width: 120, height: 120 }} />)}
+          </ScrollView>
         </Contents>
       </ContentArea>
-      <BottomToolBar isPublic={isPublic} setPublic={setPublic} />
+      <BottomToolBar isPublic={isPublic} setPublic={setPublic} imageList={imageList} setImageList={setImageList} />
     </Container>
   );
 };
