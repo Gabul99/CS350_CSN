@@ -5,6 +5,7 @@ import CSText, { FontType } from "../../components/core/CSText";
 import { WithLocalSvg } from "react-native-svg";
 import { TouchableOpacity, View } from "react-native";
 import BottomToolBar from "../../components/post/BottomToolBar";
+import CsDropdown from "../../components/core/CSDropdown";
 
 const Container = styled.View`
   height: 100%;
@@ -23,10 +24,25 @@ const TopBarContainer = styled.View`
   padding: 0 16px;
 `;
 
-const Contents = styled.View`
+const ContentArea = styled.View`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+`;
+
+const Contents = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  background-color: ${Colors.WHITE100};
+  gap: 16px;
+`;
+
+const TextArea = styled.TextInput`
+  width: 100%;
+  height: 180px;
+  background-color: #F5F9F9;
 `;
 
 interface Props {
@@ -35,6 +51,7 @@ interface Props {
 
 const CreatePostScreen = ({ navigation }: Props) => {
   const [isPublic, setPublic] = useState<boolean>(true);
+  const [contentText, setContentText] = useState<string>('');
 
   return (
     <Container>
@@ -48,7 +65,15 @@ const CreatePostScreen = ({ navigation }: Props) => {
           </CSText>
         </View>
       </TopBarContainer>
-      <Contents></Contents>
+      <ContentArea>
+        <Contents>
+          <CsDropdown title={'Clubs'} />
+          <CSText fontType={FontType.BOLD} fontSize={20}>
+            Content
+          </CSText>
+          <TextArea value={contentText} onChangeText={text => setContentText(text)} multiline={true} style={{padding: 8}} />
+        </Contents>
+      </ContentArea>
       <BottomToolBar isPublic={isPublic} setPublic={setPublic} />
     </Container>
   );
