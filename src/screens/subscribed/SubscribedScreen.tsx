@@ -45,14 +45,13 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
                        setSearchKeyword={setSearchKeyword} />
       {state === SubscribedState.FEED &&
       <>
-        <Content>
-          <Empty />
-        </Content>
-        {/*<ScrollArea contentContainerStyle={{rowGap: 6}}>*/}
-        {/*  <FeedPost />*/}
-        {/*  <FeedPost />*/}
-        {/*  <FeedPost />*/}
-        {/*</ScrollArea>*/}
+        {/*<Content>*/}
+        {/*  <Empty />*/}
+        {/*</Content>*/}
+        <ScrollArea contentContainerStyle={{rowGap: 6}}>
+          <FeedPost rootNavigation={rootNavigation} />
+          <FeedPost rootNavigation={rootNavigation} />
+        </ScrollArea>
       </>
       }
       {state !== SubscribedState.FEED &&

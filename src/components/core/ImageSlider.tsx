@@ -9,6 +9,7 @@ const SliderContainer = styled.View`
   position: relative;
   height: 390px;
   max-height: 390px;
+  background-color: ${Colors.BLACK100};
 `;
 
 const IndicatorContainer = styled.View`
@@ -23,7 +24,7 @@ const IndicatorContainer = styled.View`
 
 const ImageSliderView = () => {
   const images = [
-    "https://picsum.photos/200", "https://picsum.photos/300"
+    "https://picsum.photos/300/200", "https://picsum.photos/300"
   ];
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
