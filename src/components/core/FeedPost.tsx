@@ -7,7 +7,6 @@ import { WithLocalSvg } from "react-native-svg";
 
 const Container = styled.View`
   width: 100%;
-  height: fit-content;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -15,7 +14,6 @@ const Container = styled.View`
 
 const Header = styled.View`
   width: 100%;
-  height: fit-content;
   padding: 18px;
   display: flex;
   flex-direction: row;
