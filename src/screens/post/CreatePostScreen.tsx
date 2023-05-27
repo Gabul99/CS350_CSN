@@ -51,8 +51,9 @@ interface Props {
 
 const CreatePostScreen = ({ navigation }: Props) => {
   const [isPublic, setPublic] = useState<boolean>(true);
-  const [contentText, setContentText] = useState<string>('');
+  const [contentText, setContentText] = useState<string>("");
   const [imageList, setImageList] = useState<string[]>([]);
+  const [selectedClubId, setSelectedClubId] = useState<number | null>(null);
 
   return (
     <Container>
@@ -68,13 +69,24 @@ const CreatePostScreen = ({ navigation }: Props) => {
       </TopBarContainer>
       <ContentArea>
         <Contents>
-          <CsDropdown title={'Clubs'} />
-          <CSText fontType={FontType.BOLD} fontSize={20}>
-            Content
-          </CSText>
-          <TextArea value={contentText} onChangeText={text => setContentText(text)} multiline={true} style={{padding: 8}} />
-          <ScrollView horizontal contentContainerStyle={{columnGap: 8}}>
-            {imageList.map(imageUri => <Image source={{uri: imageUri}} style={{ width: 120, height: 120 }} />)}
+          <View style={{ width: '100%', display: "flex", flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
+            <CSText fontType={FontType.BOLD} fontSize={20}>
+              Club
+            </CSText>
+            <View style={{width: '75%'}}>
+              <CsDropdown selectedId={selectedClubId} onSelect={setSelectedClubId}
+                          optionList={[{ value: 0, label: "hihi" }, { value: 1, label: "hihihi" }]} />
+            </View>
+          </View>
+          <View style={{ zIndex: -5, gap: 16 }}>
+            <CSText fontType={FontType.BOLD} fontSize={20}>
+              Content
+            </CSText>
+            <TextArea value={contentText} onChangeText={text => setContentText(text)} multiline={true}
+                      style={{ padding: 8 }} />
+          </View>
+          <ScrollView horizontal contentContainerStyle={{ columnGap: 8 }}>
+            {imageList.map(imageUri => <Image source={{ uri: imageUri }} style={{ width: 120, height: 120 }} />)}
           </ScrollView>
         </Contents>
       </ContentArea>
