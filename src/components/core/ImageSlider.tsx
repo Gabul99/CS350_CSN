@@ -1,9 +1,11 @@
 // @ts-ignore
 import { SliderBox } from "react-native-image-slider-box";
 import styled from "styled-components/native";
-import { useState } from "react";
+import React, { useState } from "react";
 import CSText, { FontType } from "./CSText";
 import { Colors } from "../../style/Colors";
+import ImageViewer from "react-native-image-zoom-viewer";
+import { Modal } from "react-native";
 
 const SliderContainer = styled.View`
   position: relative;
@@ -23,21 +25,33 @@ const IndicatorContainer = styled.View`
 `;
 
 const ImageSliderView = () => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isImageViewerOpen, setImageViewOpen] = useState<boolean>(false);
+  const [viewerStartIdx, setViewerStartIdx] = useState<number>(0);
+
   const images = [
     "https://picsum.photos/300/200", "https://picsum.photos/300"
   ];
 
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   return (
     <SliderContainer>
       <SliderBox images={images} resizeMode={"contain"} ImageComponentStyle={{ height: "100%" }}
-                 currentImageEmitter={(index: number) => setCurrentIndex(index)} dotStyle={{width: 0, height: 0}} />
+                 currentImageEmitter={(index: number) => setCurrentIndex(index)} dotStyle={{ width: 0, height: 0 }}
+                 onCurrentImagePressed={(idx: number) => {
+                   setViewerStartIdx(idx);
+                   setImageViewOpen(true);
+                 }} />
       <IndicatorContainer>
         <CSText fontType={FontType.REGULAR} color={Colors.WHITE100} fontSize={14}>
           {`${currentIndex + 1}/${images.length}`}
         </CSText>
       </IndicatorContainer>
+      <Modal visible={isImageViewerOpen} transparent={true}>
+        <ImageViewer index={viewerStartIdx} onCancel={() => setImageViewOpen(false)} imageUrls={images.map(imageUrl => {
+          return { url: imageUrl };
+        })} enableSwipeDown={true} onSwipeDown={() => setImageViewOpen(false)} />
+      </Modal>
     </SliderContainer>
   );
 };
