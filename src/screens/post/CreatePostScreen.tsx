@@ -3,9 +3,10 @@ import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../../components/core/CSText";
 import { WithLocalSvg } from "react-native-svg";
-import { Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { Image, Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import BottomToolBar from "../../components/post/BottomToolBar";
 import CsDropdown from "../../components/core/CSDropdown";
+import ImageViewer from "react-native-image-zoom-viewer";
 
 const Container = styled.View`
   height: 100%;
@@ -54,6 +55,8 @@ const CreatePostScreen = ({ navigation }: Props) => {
   const [contentText, setContentText] = useState<string>("");
   const [imageList, setImageList] = useState<string[]>([]);
   const [selectedClubId, setSelectedClubId] = useState<number | null>(null);
+  const [isImageViewerOpen, setImageViewOpen] = useState<boolean>(false);
+  const [viewerStartIdx, setViewerStartIdx] = useState<number>(0);
 
   return (
     <Container>
@@ -86,11 +89,19 @@ const CreatePostScreen = ({ navigation }: Props) => {
                       style={{ padding: 8 }} />
           </View>
           <ScrollView horizontal contentContainerStyle={{ columnGap: 8 }}>
-            {imageList.map(imageUri => <Image source={{ uri: imageUri }} style={{ width: 120, height: 120 }} />)}
+            {imageList.map((imageUri, idx) =><TouchableOpacity onPress={() => {
+              setViewerStartIdx(idx);
+              setImageViewOpen(true);
+            }}><Image source={{ uri: imageUri }} style={{ width: 120, height: 120 }} /></TouchableOpacity>)}
           </ScrollView>
         </Contents>
       </ContentArea>
       <BottomToolBar isPublic={isPublic} setPublic={setPublic} imageList={imageList} setImageList={setImageList} />
+      <Modal visible={isImageViewerOpen} transparent={true}>
+        <ImageViewer index={viewerStartIdx} onCancel={() => setImageViewOpen(false)} imageUrls={imageList.map(imageUrl => {
+          return {url: imageUrl}
+        })} enableSwipeDown={true} onSwipeDown={() => setImageViewOpen(false)} />
+      </Modal>
     </Container>
   );
 };
