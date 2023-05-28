@@ -67,7 +67,7 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
           <FeedPost />
           <FeedPost />
         </ScrollArea>
-        <FloatingCreatePost>
+        <FloatingCreatePost onPress={() => rootNavigation.navigate('CreatePost')}>
           <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={32} height={32} />
         </FloatingCreatePost>
       </ContentArea>
