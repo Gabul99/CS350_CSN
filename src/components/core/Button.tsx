@@ -15,14 +15,14 @@ const StyledButton = styled.TouchableOpacity`
 `;
 
 interface Props extends TouchableOpacityProps{
-  size?: string;
+  size?: number;
   fill?: boolean;
   color: string;
   text: string;
   children?: ReactNode;
 }
 
-const CSButton = ({size = 'SMALL', fill = false, color, text, children, onPress, ...props}: Props) => {
+const CSButton = ({size = 14, fill = false, color, text, children, onPress, ...props}: Props) => {
   const getFillColor = (fill: boolean, color: string) => {
     if(fill) return color;
     return Colors.WHITE100;
@@ -50,7 +50,7 @@ const CSButton = ({size = 'SMALL', fill = false, color, text, children, onPress,
     }
   }
   return <StyledButton style={{borderColor: getStrokeColor(fill, color), backgroundColor: getFillColor(fill, color)}} onPress={onPress}>
-      <CSText fontType={FontType.MEDIUM} color={getFontColor(fill, color)} fontSize={14}>{text}</CSText>
+      <CSText fontType={FontType.MEDIUM} color={getFontColor(fill, color)} fontSize={size}>{text}</CSText>
       {children}
     </StyledButton>
 };
