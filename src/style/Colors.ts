@@ -4,6 +4,7 @@ export const Colors = {
   WHITE100: '#FFFFFF',
 
   GREY: '#D9D9D9',
+  LIGHTGREY: '#EEF1F2',
 
   GREEN_BACKGROUND: '#E0EBED',
   GREEN_DARK: '#2D4D52',

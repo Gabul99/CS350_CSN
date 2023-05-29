@@ -1,6 +1,8 @@
 import React from "react";
+import { Text } from "react-native";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
+import ClubDetailScreen from "./ClubDetailScreen";
 import CSText, { FontType } from "../../components/core/CSText";
 import ClubSelectBar from "../../components/my_clubs/ClubSelectBar";
 import FeedPost from "../../components/core/FeedPost";
@@ -54,6 +56,7 @@ interface Props {
 
 const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
   return (
+      //<ClubDetailScreen></ClubDetailScreen>
     <Container>
       <TopBarContainer>
         <CSText fontType={FontType.BOLD} fontSize={24}>
