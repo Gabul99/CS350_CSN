@@ -1,12 +1,26 @@
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
 import FeedPost from "../../components/core/FeedPost";
 import styled from "styled-components/native";
 import Empty from "../../components/subscribed/Empty";
 import { Colors } from "../../style/Colors";
-import ClubDetailBar from "../../components/Club/ClubDetailBar";
-import ClubDetailTopBar from "../../components/Club/ClubDetailTopBar";
+import ClubDetailBar from "../../components/ClubDetail/ClubDetailBar";
+import ClubDetailTopBar from "../../components/ClubDetail/ClubDetailTopBar";
+import ClubSetting from "../../components/ClubDetail/ClubSetting";
+import MemberList from "./MemberList";
+import ApplicationList from "./ApplicationList";
+
+export enum ClubMemberState {
+  GENERAL,
+  MEMBER,
+  ADMIN,
+}
+
+export enum ClubDetailState {
+  GENERAL,
+  SETTING,
+  APPLIST,
+}
 
 interface Props {
   navigation: any;
@@ -31,16 +45,36 @@ const ScrollArea = styled.ScrollView`
 `;
 
 const ClubDetailScreen = ({ navigation, rootNavigation }: Props) => {
+  const [clubState, setClubState] = useState<ClubMemberState>(ClubMemberState.ADMIN);
+  const [state, setState] = useState<ClubDetailState>(ClubDetailState.GENERAL);
 
   return (
     <Container>
-      {/* <ClubDetailTopBar /> */}
-			<ScrollArea contentContainerStyle={{rowGap: 6}}>
-				<ClubDetailBar></ClubDetailBar>
-				<FeedPost />
-				<FeedPost />
-				<FeedPost />
-			</ScrollArea>
+      <ClubDetailTopBar clubName={'KAIST_Puple'} state={state} setState={setState} clubState={clubState} />
+      {state === ClubDetailState.GENERAL &&
+        <>
+          <ScrollArea contentContainerStyle={{rowGap: 6}}>
+            <ClubDetailBar></ClubDetailBar>
+            <FeedPost />
+            <FeedPost />
+            <FeedPost />
+          </ScrollArea>
+        </>
+      }
+      {state === ClubDetailState.SETTING &&
+        <>
+          <ScrollArea>
+            <ClubSetting state={state} setState={setState} ></ClubSetting>
+            <MemberList></MemberList>
+          </ScrollArea>
+        </>
+      }
+      {state === ClubDetailState.APPLIST &&
+        <>
+          <ApplicationList></ApplicationList>
+        </>
+      }
+			
     </Container>
   );
 };
