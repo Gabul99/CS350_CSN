@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import qs from 'qs';
+import axios from "axios";
 
 enum HttpMethod {
   GET = 'get',
@@ -34,6 +35,8 @@ export const putForEntity: <T>(url: string, data: any) => Promise<T> = (url: str
   return requestForEntity(HttpMethod.PUT, url, null, data);
 };
 
+let testToken = '';
+
 const requestForEntity: <T>(
   method: HttpMethod,
   url: string,
@@ -47,30 +50,29 @@ const requestForEntity: <T>(
   data: any | null,
   arrayNoBrackets?: boolean,
 ) => {
-  // const idToken = await firebase.auth().currentUser?.getIdToken();
-  // if (!idToken) {
-  //   if (showNotLoginAlertFlag) {
-  //     showNotLoginAlertFlag = false;
-  //     alert('로그인 후 이용해주세요!');
-  //   }
-  //   throw new Error('userNotSignInError');
-  // }
-  // const headers = {
-  //   Authorization: idToken,
-  // };
 
   try {
+    if (testToken === '') {
+      const token = await axios.get('http://localhost:3000/auth/test');
+      testToken = token.data.accessToken;
+    }
+
+    const headers = {
+      Authorization: `Bearer ${testToken}`,
+    }
+
     const axiosResult = await Axios.request({
       url,
       method,
       params,
       data,
-      // headers,
-      // baseURL: process.env.SERVER_URL,
+      headers,
+      baseURL: 'http://localhost:3000/',
       // paramsSerializer: arrayNoBrackets ? params => qs.stringify(params, { arrayFormat: 'repeat' }) : undefined,
     });
     return axiosResult.data;
   } catch (e) {
+    // 401 일 시 token refresh 필요
     throw e;
   }
 };
