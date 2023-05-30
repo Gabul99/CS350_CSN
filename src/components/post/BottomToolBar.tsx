@@ -4,7 +4,8 @@ import { WithLocalSvg } from "react-native-svg";
 import { TouchableOpacity, View } from "react-native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
-import { launchImageLibrary } from "react-native-image-picker";
+import { Asset, launchImageLibrary } from "react-native-image-picker";
+import storage from '@react-native-firebase/storage';
 
 const Container = styled.View`
   height: 72px;
@@ -32,10 +33,22 @@ interface Props {
 }
 
 const BottomToolBar = ({ isPublic, setPublic, imageList, setImageList }: Props) => {
+
+  const handleImageUpload = async (asset: Asset) => {
+    if (!asset.uri) return;
+    console.log('try to Upload...');
+    const reference = storage().ref('test.png')
+    await reference.putFile(asset.uri);
+    console.log('UploadURL: ', await reference.getDownloadURL());
+  }
+
   return (
     <Container>
       <TouchableOpacity onPress={() => {
-        launchImageLibrary({mediaType: 'photo'}, res => setImageList(imageList.concat((res.assets ?? []).map(asset => asset.uri ?? ''))));
+        launchImageLibrary({mediaType: 'photo'}, res => {
+          if (res.assets) handleImageUpload(res.assets[0]);
+          setImageList(imageList.concat((res.assets ?? []).map(asset => asset.uri ?? "")));
+        });
       }}>
         <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={32} height={32} />
       </TouchableOpacity>
