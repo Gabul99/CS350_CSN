@@ -5,7 +5,9 @@ import { TouchableOpacity, View } from "react-native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import { Asset, launchImageLibrary } from "react-native-image-picker";
-import storage from '@react-native-firebase/storage';
+import { useStorage } from "../../utils/useStorage";
+import "react-native-get-random-values";
+import { v4 as uuidV4 } from "uuid";
 
 const Container = styled.View`
   height: 72px;
@@ -33,27 +35,35 @@ interface Props {
 }
 
 const BottomToolBar = ({ isPublic, setPublic, imageList, setImageList }: Props) => {
-
-  const handleImageUpload = async (asset: Asset) => {
-    if (!asset.uri) return;
-    console.log('try to Upload...');
-    const reference = storage().ref('test.png')
-    await reference.putFile(asset.uri);
-    console.log('UploadURL: ', await reference.getDownloadURL());
-  }
+  const { isLoading, uploadAndGetURL } = useStorage();
 
   return (
     <Container>
+      {!isLoading &&
       <TouchableOpacity onPress={() => {
-        launchImageLibrary({mediaType: 'photo'}, res => {
-          if (res.assets) handleImageUpload(res.assets[0]);
-          setImageList(imageList.concat((res.assets ?? []).map(asset => asset.uri ?? "")));
+        launchImageLibrary({ mediaType: "photo" }, res => {
+          if (!res.assets) return;
+          const asset = res.assets[0];
+          const uuid = uuidV4();
+          uploadAndGetURL(`post/${uuid}.png`, asset.uri, asset.base64)
+            .then(url => {
+              if (!url) return;
+              setImageList([...imageList, url]);
+            });
         });
       }}>
         <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={32} height={32} />
       </TouchableOpacity>
+      }
+      {isLoading &&
+      <CSText fontType={FontType.REGULAR} fontSize={14} color={Colors.BLACK100}>
+        Uploading...
+      </CSText>
+      }
       <PublicButtonArea onPress={() => setPublic(!isPublic)}>
-        <WithLocalSvg asset={isPublic ? require("../../assets/icons/ic_check_box.svg") : require("../../assets/icons/ic_check_box_blank.svg")} width={32} height={32} />
+        <WithLocalSvg
+          asset={isPublic ? require("../../assets/icons/ic_check_box.svg") : require("../../assets/icons/ic_check_box_blank.svg")}
+          width={32} height={32} />
         <CSText fontType={FontType.MEDIUM} fontSize={24} color={isPublic ? Colors.GREEN_DEEP : Colors.GREEN_DARK}>
           Public
         </CSText>
