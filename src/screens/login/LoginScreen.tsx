@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { ScrollView, Text, View } from "react-native";
 import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
 import FeedPost from "../../components/core/FeedPost";
@@ -7,6 +7,7 @@ import Empty from "../../components/subscribed/Empty";
 import { Colors } from "../../style/Colors";
 import { IntroView } from "../../components/login/IntroView";
 import { login, logout, getProfile as getKakaoProfile, unlink } from '@react-native-seoul/kakao-login';
+import { GlobalContext } from "../../network/GlobalContext";
 
 export enum SubscribedState {
   FEED,
@@ -22,17 +23,19 @@ interface Props {
 }
 
 const Container = styled.View`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${Colors.GREEN_BACKGROUND};
+  padding: 10px;
 `;
 
 const StyleButton = styled.Pressable`
   background-color: #FEE500;
   border-radius: 40px;
   border-width: 1px;
-  width: 250px;
+  width: 100%;
   height: 40px;
   padding: 10px 20px; 
   margin-top: 10px;
@@ -47,10 +50,17 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [result, setResult] = useState<string>('');
 
+  const { auth, setAuth } = useContext(GlobalContext);
+
   const signInWithKakao = async (): Promise<void> => {
     try {
       const token = await login();
       setResult(JSON.stringify(token));
+
+      setAuth({
+        authToken: token.accessToken,
+        refreshToken: token.refreshToken,
+      })
       setLoginStatus(true);
     } catch (err) {
       console.error('login err', err);
@@ -98,28 +108,28 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
         }}
       >
         <StyleText >
-          카카오 로그인
+          KAKAO Login
         </StyleText>
       </StyleButton>
       <StyleButton
         onPress={() => getProfile()}
       >
         <StyleText >
-          프로필 조회
+          Check Profile
         </StyleText>
       </StyleButton>
       <StyleButton
         onPress={() => unlinkKakao()}
       >
         <StyleText >
-          링크 해제
+          Dettach Kakao
         </StyleText>
       </StyleButton>
       <StyleButton
         onPress={() => signOutWithKakao()}
       >
         <StyleText >
-          카카오 로그아웃
+          KAKAO Logout
         </StyleText>
       </StyleButton>
     </Container>

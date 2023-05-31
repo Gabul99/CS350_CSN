@@ -18,6 +18,29 @@ interface Props {
   navigation: any;
 }
 
+const Container = styled.View`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${Colors.GREEN_BACKGROUND};
+`;
+
+
+const StyleButton = styled.Pressable`
+  backgroundColor: '#FEE500';
+  borderRadius: 40;
+  borderWidth: 1;
+  width: 250;
+  height: 40;
+  paddingHorizontal: 20;
+  paddingVertical: 10;
+  marginTop: 10;
+`;
+
+const StyleText = styled.Text`
+  text-align: center;
+`
+
 const MainLayout = ({ navigation: rootNavigation }: Props) => {
 
   const [result, setResult] = useState<string>('');

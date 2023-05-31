@@ -1,6 +1,8 @@
 import Axios from 'axios';
 import qs from 'qs';
 import axios from "axios";
+import { useContext } from "react";
+import { GlobalContext } from './GlobalContext';
 
 enum HttpMethod {
   GET = 'get',
@@ -50,29 +52,31 @@ const requestForEntity: <T>(
   data: any | null,
   arrayNoBrackets?: boolean,
 ) => {
+    const { auth } = useContext(GlobalContext);
 
-  try {
-    if (testToken === '') {
-      const token = await axios.get('http://localhost:3000/auth/test');
-      testToken = token.data.accessToken;
+    try {
+      if (auth.authToken === '') {
+        console.log('not logged in proceeding with test token')
+        const token = await axios.get('http://localhost:3000/auth/test');
+        testToken = token.data.accessToken;
+      }
+
+      const headers = {
+        Authorization: `Bearer ${auth.authToken != '' ? auth.authToken : testToken}`,
+      }
+
+      const axiosResult = await Axios.request({
+        url,
+        method,
+        params,
+        data,
+        headers,
+        baseURL: 'http://localhost:3000/',
+        // paramsSerializer: arrayNoBrackets ? params => qs.stringify(params, { arrayFormat: 'repeat' }) : undefined,
+      });
+      return axiosResult.data;
+    } catch (e) {
+      // 401 일 시 token refresh 필요
+      throw e;
     }
-
-    const headers = {
-      Authorization: `Bearer ${testToken}`,
-    }
-
-    const axiosResult = await Axios.request({
-      url,
-      method,
-      params,
-      data,
-      headers,
-      baseURL: 'http://localhost:3000/',
-      // paramsSerializer: arrayNoBrackets ? params => qs.stringify(params, { arrayFormat: 'repeat' }) : undefined,
-    });
-    return axiosResult.data;
-  } catch (e) {
-    // 401 일 시 token refresh 필요
-    throw e;
-  }
-};
+  };
