@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "107436780903",
+    "project_id": "club-social-network-e052c",
+    "storage_bucket": "club-social-network-e052c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107436780903:android:cfc916c921564a288353c2",
+        "android_client_info": {
+          "package_name": "com.cs350_csn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "107436780903-eiitahf3autee2dk7vubo3tuvqk6d2vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTEgjzMh6tGfuONw4dHT8IDstuRuO7_7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "107436780903-eiitahf3autee2dk7vubo3tuvqk6d2vm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "107436780903-lq4ikp0fju0d7hjche59lcrb6pt0c50f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.reactjs.native.example.CS350-CSN"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
