@@ -533,6 +533,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - Alamofire (5.7.1)
   - boost (1.76.0)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
@@ -607,6 +608,22 @@ PODS:
   - hermes-engine (0.71.8):
     - hermes-engine/Pre-built (= 0.71.8)
   - hermes-engine/Pre-built (0.71.8)
+  - kakao-login (5.2.6):
+    - KakaoSDKAuth (= 2.11.1)
+    - KakaoSDKCommon (= 2.11.1)
+    - KakaoSDKUser (= 2.11.1)
+    - React
+  - KakaoSDKAuth (2.11.1):
+    - KakaoSDKCommon (= 2.11.1)
+  - KakaoSDKCommon (2.11.1):
+    - KakaoSDKCommon/Common (= 2.11.1)
+    - KakaoSDKCommon/Network (= 2.11.1)
+  - KakaoSDKCommon/Common (2.11.1)
+  - KakaoSDKCommon/Network (2.11.1):
+    - Alamofire (~> 5.1)
+    - KakaoSDKCommon/Common (= 2.11.1)
+  - KakaoSDKUser (2.11.1):
+    - KakaoSDKAuth (= 2.11.1)
   - libevent (2.1.12)
   - Libuv-gRPC (0.0.10):
     - Libuv-gRPC/Implementation (= 0.0.10)
@@ -983,6 +1000,7 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - gRPC-Core
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - "kakao-login (from `../node_modules/@react-native-seoul/kakao-login`)"
   - libevent (~> 2.1.12)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -1024,6 +1042,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
+    - Alamofire
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAppCheckInterop
@@ -1036,6 +1055,9 @@ SPEC REPOS:
     - GoogleUtilities
     - gRPC-Core
     - GTMSessionFetcher
+    - KakaoSDKAuth
+    - KakaoSDKCommon
+    - KakaoSDKUser
     - libevent
     - Libuv-gRPC
     - PromisesObjC
@@ -1053,6 +1075,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
+  kakao-login:
+    :path: "../node_modules/@react-native-seoul/kakao-login"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -1126,6 +1150,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
+  Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -1144,6 +1169,10 @@ SPEC CHECKSUMS:
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   hermes-engine: 47986d26692ae75ee7a17ab049caee8864f855de
+  kakao-login: 2fbe3c549915276a44f7777036ee316e720f4738
+  KakaoSDKAuth: bb2dfa7be30daa8403c9cfc8001aa6fde7a5b779
+  KakaoSDKCommon: 555e1bb46595b842ded01cf7888cc17bbae4e113
+  KakaoSDKUser: 08c0a4f40bebdebdf948a9e3d0e44ed5c2754f99
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
@@ -1185,4 +1214,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 6a39632a7ff65a77f0c62641b3694d09b3400d23
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.11.3
