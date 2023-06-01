@@ -4,6 +4,7 @@ import CSText, { FontType } from "./CSText";
 import ImageSliderView from "./ImageSlider";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
+import { TouchableOpacity } from "react-native";
 
 const Container = styled.View`
   width: 100%;
@@ -68,7 +69,10 @@ const FeedPost = ({ rootNavigation }: Props) => {
   return (
     <Container>
       <Header>
-        <ImagePlace />
+        <TouchableOpacity onPress={() => rootNavigation.navigate('ClubDetail')}>
+          <ImagePlace />
+        </TouchableOpacity>
+        
         <PostInfoArea>
           <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>KAIST Puple</CSText>
           <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>

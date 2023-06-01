@@ -27,16 +27,18 @@ interface Props {
   clubName: string;
   clubState: ClubMemberState;
   state: ClubDetailState;
+  navigation: any;
   setState: (value: ClubDetailState) => void;
 }
 
-const ClubDetailTopBar = ({ clubName, clubState, state, setState}: Props) => {
+const ClubDetailTopBar = ({ clubName, clubState, state, setState, navigation}: Props) => {
   const [starred, setStarred] = useState(false);
   return (
     <Container>
       <TouchableOpacity onPress={() => 
         state === ClubDetailState.SETTING && setState(ClubDetailState.GENERAL) ||
-        state === ClubDetailState.APPLIST && setState(ClubDetailState.SETTING)}>{/* TODO : go back */}
+        state === ClubDetailState.APPLIST && setState(ClubDetailState.SETTING) || 
+        state === ClubDetailState.GENERAL &&navigation.goBack()}>{/* TODO : go back */}
         <WithLocalSvg asset={require("../../assets/icons/ic_arrow_back_ios.svg")} width={28} height={28} />
       </TouchableOpacity>
       <CSText fontType={FontType.BOLD} fontSize={20}>{clubName}</CSText>
