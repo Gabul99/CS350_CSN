@@ -66,9 +66,9 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
       <ContentArea>
         <ScrollArea contentContainerStyle={{ rowGap: 6 }}>
           <ClubSelectBar />
-          <FeedPost />
-          <FeedPost />
-          <FeedPost />
+          <FeedPost rootNavigation={rootNavigation} />
+          <FeedPost rootNavigation={rootNavigation} />
+          <FeedPost rootNavigation={rootNavigation} />
         </ScrollArea>
         <FloatingCreatePost onPress={() => rootNavigation.navigate('CreatePost')}>
           <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={32} height={32} />

@@ -6,6 +6,10 @@ import { WithLocalSvg } from "react-native-svg";
 import CSButton from "../core/Button";
 import { TouchableOpacity, Image } from "react-native";
 import { ClubDetailState } from "../../screens/my_clubs/ClubDetailScreen";
+import { useStorage } from "../../utils/useStorage";
+import "react-native-get-random-values";
+import { v4 as uuidV4 } from "uuid";
+import { launchImageLibrary } from "react-native-image-picker";
 
 const Container = styled.View`
   width: 100%;
@@ -122,18 +126,35 @@ const ClubSetting = ({state, setState}: Props) => {
   const [description, onChangeDesc] = React.useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at risus et lorem tincidunt');
   const [canApply, setCanApply] = useState(false);
   const [imageUri, setImageUri] = useState('');
+  const { isLoading, uploadAndGetURL } = useStorage();
 
   return (
     <Container>
       <Header>
         <ImagePlaceBig>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={{ width: 96, height: 96, borderRadius: 48 }} />
+          {imageUri ? ( isLoading? (
+            <PropNameText>Loading</PropNameText>
+          ): (
+            <Image source={{ uri: imageUri }} style={{ width: 96, height: 96, borderRadius: 48 }} />)
           ) : (
             <PropNameText>Empty</PropNameText>
           )}
           <EditImage>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              console.log('running');
+              launchImageLibrary({ mediaType: "photo" }, res => {
+              if (!res.assets) return;
+              const asset = res.assets[0];
+              console.log(asset, asset.uri, asset.base64);
+              const uuid = uuidV4();
+              uploadAndGetURL(`club/${uuid}.png`, asset.uri)
+                .then(url => {
+                  if (!url) return;
+                  setImageUri(url);
+                  console.log(imageUri);
+                });
+              });
+            }}>
               <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={18} height={18} />
             </TouchableOpacity>
           </EditImage>

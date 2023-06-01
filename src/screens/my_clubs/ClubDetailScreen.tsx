@@ -24,7 +24,7 @@ export enum ClubDetailState {
 
 interface Props {
   navigation: any;
-  rootNavigation: any;
+  // rootNavigation: any;
 }
 
 const Container = styled.View`
@@ -44,13 +44,13 @@ const ScrollArea = styled.ScrollView`
   flex-direction: column;
 `;
 
-const ClubDetailScreen = ({ navigation, rootNavigation }: Props) => {
+const ClubDetailScreen = ({ navigation }: Props) => {
   const [clubState, setClubState] = useState<ClubMemberState>(ClubMemberState.ADMIN);
   const [state, setState] = useState<ClubDetailState>(ClubDetailState.GENERAL);
 
   return (
     <Container>
-      <ClubDetailTopBar clubName={'KAIST_Puple'} state={state} setState={setState} clubState={clubState} />
+      <ClubDetailTopBar clubName={'KAIST_Puple'} state={state} setState={setState} clubState={clubState} navigation={navigation} />
       {state === ClubDetailState.GENERAL &&
         <>
           <ScrollArea contentContainerStyle={{rowGap: 6}}>
