@@ -8,7 +8,6 @@ const Container = styled.View`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: fit-content;
   padding: 18px;
   background-color: ${Colors.WHITE100};
   gap: 12px;

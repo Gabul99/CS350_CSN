@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import ClubListItem from "../../components/subscribed/ClubListItem";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   width: 100%;
@@ -36,6 +37,12 @@ interface Props {
 }
 
 const ClubList = ({ rootNavigation }: Props) => {
+  const focused = useIsFocused();
+
+  useEffect(() => {
+    console.log('focused:', focused);
+  }, [focused]);
+
   return (
     <Container>
       <ScrollArea>

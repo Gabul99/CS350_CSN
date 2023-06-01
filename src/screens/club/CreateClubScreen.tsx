@@ -8,6 +8,7 @@ import CSButton from "../../components/core/Button";
 import { launchImageLibrary } from "react-native-image-picker";
 import { v4 as uuidV4 } from "uuid";
 import { useStorage } from "../../utils/useStorage";
+import { StackActions } from "@react-navigation/native";
 
 const Container = styled.View`
   width: 100%;
@@ -94,6 +95,12 @@ const CreateClubScreen = ({ navigation }: Props) => {
 
   const {uploadAndGetURL, isLoading} = useStorage();
 
+  const handleCreate = () => {
+    navigation.dispatch(
+      StackActions.replace('PostDetail')
+    )
+  }
+
   return (
     <Container>
       <TopBarContainer>
@@ -106,7 +113,7 @@ const CreateClubScreen = ({ navigation }: Props) => {
           </CSText>
         </View>
         <ButtonArea>
-          <CSButton color={Colors.GREEN_DEEP} text={"Create"} fill />
+          <CSButton color={Colors.GREEN_DEEP} text={"Create"} fill onPress={handleCreate} />
         </ButtonArea>
       </TopBarContainer>
       <InfoArea>
