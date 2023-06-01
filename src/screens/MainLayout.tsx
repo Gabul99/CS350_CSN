@@ -50,50 +50,7 @@ const MainLayout = ({ navigation: rootNavigation }: Props) => {
     return (
       <Tab.Navigator initialRouteName={"Login"} screenOptions={{ tabBarShowLabel: false, headerShown: false }}>
         <Tab.Screen name={"Login"} children={({ navigation, }) => <LoginScreen navigation={navigation} rootNavigation={rootNavigation} loginStatus={loginStatus} setLoginStatus={setLoginStatus} />}
-        //   options={{
-        //   tabBarIcon: ({ focused }) => focused ?
-        //     <WithLocalSvg asset={require("../assets/icons/ic_selected_subscribed.svg")} width={32} height={32} />
-        //     :
-        //     <WithLocalSvg asset={require("../assets/icons/ic_subscribed.svg")} width={32} height={32} />
-        // }} 
         />
-        {
-
-          // <Container >
-          //   <IntroView result={result} />
-          //   <StyleButton
-          //     onPress={() => {
-          //       signInWithKakao();
-          //     }}
-          //   >
-          //     <StyleText >
-          //       카카오 로그인
-          //     </StyleText>
-          //   </StyleButton>
-          //   <StyleButton
-          //     onPress={() => getProfile()}
-          //   >
-          //     <StyleText >
-          //       프로필 조회
-          //     </StyleText>
-          //   </StyleButton>
-          //   <StyleButton
-          //     onPress={() => unlinkKakao()}
-          //   >
-          //     <StyleText >
-          //       링크 해제
-          //     </StyleText>
-          //   </StyleButton>
-          //   <StyleButton
-          //     onPress={() => signOutWithKakao()}
-          //   >
-          //     <StyleText >
-          //       카카오 로그아웃
-          //     </StyleText>
-          //   </StyleButton>
-          // </Container>
-        }
-
       </Tab.Navigator >
     )
   }

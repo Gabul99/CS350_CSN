@@ -8,6 +8,7 @@ import { Colors } from "../../style/Colors";
 import { IntroView } from "../../components/login/IntroView";
 import { login, logout, getProfile as getKakaoProfile, unlink } from '@react-native-seoul/kakao-login';
 import { GlobalContext } from "../../network/GlobalContext";
+import CSText, { FontType } from "../../components/core/CSText";
 
 export enum SubscribedState {
   FEED,
@@ -26,12 +27,15 @@ const Container = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   background-color: ${Colors.GREEN_BACKGROUND};
   padding: 10px;
 `;
 
 const StyleButton = styled.Pressable`
+  align-items: center;
   background-color: #FEE500;
   border-radius: 40px;
   border-width: 1px;
@@ -40,10 +44,6 @@ const StyleButton = styled.Pressable`
   padding: 10px 20px; 
   margin-top: 10px;
 `;
-
-const StyleText = styled.Text`
-  text-align: center;
-`
 
 const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }: Props) => {
   const [state, setState] = useState<SubscribedState>(SubscribedState.FEED);
@@ -67,37 +67,6 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
     }
   };
 
-  const signOutWithKakao = async (): Promise<void> => {
-    try {
-      const message = await logout();
-
-      setResult(message);
-    } catch (err) {
-      console.error('signOut error', err);
-    }
-  };
-
-  const getProfile = async (): Promise<void> => {
-    try {
-      const profile = await getKakaoProfile();
-
-      setResult(JSON.stringify(profile));
-    } catch (err) {
-      console.error('signOut error', err);
-    }
-  };
-
-  const unlinkKakao = async (): Promise<void> => {
-    try {
-      const message = await unlink();
-
-      setResult(message);
-    } catch (err) {
-      console.error('signOut error', err);
-    }
-  };
-
-
   return (
 
     <Container >
@@ -107,30 +76,9 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
           signInWithKakao();
         }}
       >
-        <StyleText >
+        <CSText fontType={FontType.MEDIUM} fontSize={16} >
           KAKAO Login
-        </StyleText>
-      </StyleButton>
-      <StyleButton
-        onPress={() => getProfile()}
-      >
-        <StyleText >
-          Check Profile
-        </StyleText>
-      </StyleButton>
-      <StyleButton
-        onPress={() => unlinkKakao()}
-      >
-        <StyleText >
-          Dettach Kakao
-        </StyleText>
-      </StyleButton>
-      <StyleButton
-        onPress={() => signOutWithKakao()}
-      >
-        <StyleText >
-          KAKAO Logout
-        </StyleText>
+        </CSText>
       </StyleButton>
     </Container>
   );
