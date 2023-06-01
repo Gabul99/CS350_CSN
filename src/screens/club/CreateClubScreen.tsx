@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../../components/core/CSText";
 import CSButton from "../../components/core/Button";
+import { launchImageLibrary } from "react-native-image-picker";
+import { v4 as uuidV4 } from "uuid";
+import { useStorage } from "../../utils/useStorage";
 
 const Container = styled.View`
   width: 100%;
@@ -86,8 +89,10 @@ interface Props {
 }
 
 const CreateClubScreen = ({ navigation }: Props) => {
-  const [name, onChangeName] = React.useState("");
-  const imageUri = undefined;
+  const [name, onChangeName] = useState<string>("");
+  const [imageUri, setImageUri] = useState<string>("");
+
+  const {uploadAndGetURL, isLoading} = useStorage();
 
   return (
     <Container>
@@ -121,14 +126,27 @@ const CreateClubScreen = ({ navigation }: Props) => {
           Club Image
         </CSText>
         <ImagePlaceBig>
-          {imageUri ? (
+          {!!imageUri ? (
             <Image source={{ uri: imageUri }} style={{ width: 96, height: 96, borderRadius: 48 }} />
           ) : (
             <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={28} height={28} />
           )}
           <EditImage>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              launchImageLibrary({mediaType: 'photo'}, res => {
+                if (!res.assets) return;
+                const asset = res.assets[0];
+                const uuid = uuidV4();
+                uploadAndGetURL(`club/${uuid}.png`, asset.uri)
+                  .then(url => {
+                    if (!url) return;
+                    setImageUri(url);
+                  })
+              })
+            }}>
+              {!isLoading &&
               <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={18} height={18} />
+              }
             </TouchableOpacity>
           </EditImage>
         </ImagePlaceBig>
