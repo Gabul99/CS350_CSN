@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>107436780903-lq4ikp0fju0d7hjche59lcrb6pt0c50f.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.107436780903-lq4ikp0fju0d7hjche59lcrb6pt0c50f</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDOhPmY2D4K0dd34eGODzqH6L8rcu0VEMc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>107436780903</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.reactjs.native.example.CS350-CSN</string>
+	<key>PROJECT_ID</key>
+	<string>club-social-network-e052c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>club-social-network-e052c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:107436780903:ios:f2f69a8740a6c1258353c2</string>
+</dict>
+</plist>
