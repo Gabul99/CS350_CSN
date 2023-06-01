@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View, Alert } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
@@ -9,6 +9,7 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { v4 as uuidV4 } from "uuid";
 import { useStorage } from "../../utils/useStorage";
 import { StackActions } from "@react-navigation/native";
+import ClubsApi from "../../network/api/ClubsApi";
 
 const Container = styled.View`
   width: 100%;
@@ -85,6 +86,16 @@ const TitleInput = styled.TextInput`
   width: 100%;
 `;
 
+const DescInput = styled.TextInput`
+  font-family: "Helvetica Neue";
+  font-weight: 400;
+  color: ${Colors.BLACK100};
+  background-color: ${Colors.LIGHTGREY};
+  font-size: 14px;
+  padding: 8px 12px;
+  width: 100%;
+`;
+
 interface Props {
   navigation: any;
 }
@@ -92,14 +103,29 @@ interface Props {
 const CreateClubScreen = ({ navigation }: Props) => {
   const [name, onChangeName] = useState<string>("");
   const [imageUri, setImageUri] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [isNetworking, setNetworking] = useState<boolean>(false);
 
-  const {uploadAndGetURL, isLoading} = useStorage();
+  const { uploadAndGetURL, isLoading } = useStorage();
 
   const handleCreate = () => {
-    navigation.dispatch(
-      StackActions.replace('PostDetail')
-    )
-  }
+    if (!name || !imageUri) {
+      Alert.alert("You can't create", "Please fill club name, description and upload image");
+      return;
+    }
+    setNetworking(true);
+    ClubsApi.postClubs(name, description, imageUri)
+      .then(() => {
+        setNetworking(false);
+        navigation.dispatch(
+          StackActions.replace("PostDetail")
+        );
+      })
+      .catch((e) => {
+        setNetworking(false);
+        Alert.alert("Fail to create", `Error: ${e.message}`);
+      });
+  };
 
   return (
     <Container>
@@ -113,19 +139,34 @@ const CreateClubScreen = ({ navigation }: Props) => {
           </CSText>
         </View>
         <ButtonArea>
+          {!isNetworking &&
           <CSButton color={Colors.GREEN_DEEP} text={"Create"} fill onPress={handleCreate} />
+          }
+          {isNetworking &&
+          <CSText fontType={FontType.REGULAR} fontSize={14}>
+            Creating...
+          </CSText>
+          }
         </ButtonArea>
       </TopBarContainer>
       <InfoArea>
         <ClubInfoArea>
           <CSText fontType={FontType.MEDIUM} fontSize={14}>
             Club Name
-        </CSText>
+          </CSText>
           <TitleInput
             onChangeText={onChangeName}
             value={name}
-            placeholder={'Enter your club name'}
+            placeholder={"Enter your club name"}
           />
+        </ClubInfoArea>
+      </InfoArea>
+      <InfoArea>
+        <ClubInfoArea>
+          <CSText fontType={FontType.MEDIUM} fontSize={14}>
+            Club Description
+          </CSText>
+          <DescInput multiline value={description} onChangeText={setDescription} placeholder={"Enter description"} />
         </ClubInfoArea>
       </InfoArea>
       <InfoArea>
@@ -139,8 +180,9 @@ const CreateClubScreen = ({ navigation }: Props) => {
             <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={28} height={28} />
           )}
           <EditImage>
+            {!isLoading &&
             <TouchableOpacity onPress={() => {
-              launchImageLibrary({mediaType: 'photo'}, res => {
+              launchImageLibrary({ mediaType: "photo" }, res => {
                 if (!res.assets) return;
                 const asset = res.assets[0];
                 const uuid = uuidV4();
@@ -148,13 +190,12 @@ const CreateClubScreen = ({ navigation }: Props) => {
                   .then(url => {
                     if (!url) return;
                     setImageUri(url);
-                  })
-              })
+                  });
+              });
             }}>
-              {!isLoading &&
               <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={18} height={18} />
-              }
             </TouchableOpacity>
+            }
           </EditImage>
         </ImagePlaceBig>
       </InfoArea>
