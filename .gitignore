@@ -78,7 +78,6 @@ yarn-error.log
 
 # Ruby / CocoaPods
 /ios/Pods/
-!/ios/Pods/CS350_CSN/Info.plist
 /vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
