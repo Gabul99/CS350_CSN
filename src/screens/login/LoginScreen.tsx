@@ -9,6 +9,8 @@ import { IntroView } from "../../components/login/IntroView";
 import { login, logout, getProfile as getKakaoProfile, unlink } from '@react-native-seoul/kakao-login';
 import { GlobalContext } from "../../network/GlobalContext";
 import CSText, { FontType } from "../../components/core/CSText";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export enum SubscribedState {
   FEED,
@@ -57,9 +59,18 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
       const token = await login();
       setResult(JSON.stringify(token));
 
+      const connect = await axios.get<{accessToken: string, refreshToken: string}>('http://localhost:3000/auth/kakao/native', {
+        params: {
+          code: token.accessToken,
+        },
+      })
+
+      await AsyncStorage.setItem('accessToken', connect.data.accessToken);
+      await AsyncStorage.setItem('refreshToken', connect.data.refreshToken);
+
       setAuth({
-        authToken: token.accessToken,
-        refreshToken: token.refreshToken,
+        authToken: connect.data.accessToken,
+        refreshToken: connect.data.refreshToken,
       })
       setLoginStatus(true);
     } catch (err) {
