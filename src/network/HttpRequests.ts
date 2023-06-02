@@ -38,6 +38,10 @@ export const putForEntity: <T>(url: string, data: any) => Promise<T> = (url: str
   return requestForEntity(HttpMethod.PUT, url, null, data);
 };
 
+export const patchForEntity: <T>(url: string, data: any) => Promise<T> = (url: string, data: any) => {
+  return requestForEntity(HttpMethod.PATCH, url, null, data);
+};
+
 let testToken = "";
 
 const requestForEntity: <T>(
