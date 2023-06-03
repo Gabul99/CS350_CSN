@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
@@ -7,6 +7,10 @@ import CSText, { FontType } from "../../components/core/CSText";
 import FeedPost from "../../components/core/FeedPost";
 import Comment from "../../components/post/Comment";
 import CommentInput from "../../components/post/CommentInput";
+import PostInfoDto from "../../model/PostInfoDto";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import PostsApi from "../../network/api/PostsApi";
+import CommentEntity from "../../model/CommentEntity";
 
 const Container = styled.View`
   width: 100%;
@@ -36,9 +40,27 @@ const ScrollArea = styled.ScrollView`
 
 interface Props {
   navigation: any;
+  route: any
 }
 
-const PostDetailScreen = ({ navigation }: Props) => {
+const PostDetailScreen = ({ navigation, route }: Props) => {
+  const [comments, setComments] = useState<CommentEntity[]>([]);
+
+  const post = route.params.post as PostInfoDto;
+
+  useEffect(() => {
+    refresh();
+  }, [post.id]);
+
+  const refresh = () => {
+    getComments();
+  }
+
+  const getComments = () => {
+    PostsApi.getPostCommentsByPostId(post.id)
+      .then(data => setComments(data));
+  }
+
   return (
     <Container>
       <TopBarContainer>
@@ -50,10 +72,10 @@ const PostDetailScreen = ({ navigation }: Props) => {
         </CSText>
       </TopBarContainer>
       <ScrollArea contentContainerStyle={{rowGap: 8}}>
-        <FeedPost />
-        <Comment />
+        <FeedPost post={post} club={route.params.club} />
+        {comments.map(comment => <Comment comment={comment} />)}
       </ScrollArea>
-      <CommentInput />
+      <CommentInput postId={post.id} refresh={refresh} />
     </Container>
   );
 };

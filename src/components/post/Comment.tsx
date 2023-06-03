@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../core/CSText";
 import { WithLocalSvg } from "react-native-svg";
+import CommentEntity from "../../model/CommentEntity";
 
 const Container = styled.View`
   display: flex;
@@ -28,14 +29,18 @@ const DeleteIcon = styled.TouchableOpacity`
   margin-left: auto;
 `;
 
-const Comment = () => {
+interface Props {
+  comment: CommentEntity;
+}
+
+const Comment = ({ comment }: Props) => {
   const isMyComment = true;
 
   return (
     <Container>
       <InfoBar>
         <CSText fontType={FontType.BOLD} fontSize={14}>
-          이희찬
+          {comment.authorId}
         </CSText>
         <CSText fontType={FontType.MEDIUM} fontSize={14} color={Colors.GREEN_SUB_TEXT}>
           11 min ago
@@ -47,7 +52,7 @@ const Comment = () => {
         }
       </InfoBar>
       <CSText fontType={FontType.REGULAR} fontSize={14}>
-        Nunc non accumsan erat. Phasellus quis efficitur orci, eu fermentum lorem. Vestibulum posuere vitae urna vitae tincidunt.
+        {comment.content}
       </CSText>
     </Container>
   );

@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../../components/core/CSText";
 import { WithLocalSvg } from "react-native-svg";
-import { Image, Modal, ScrollView, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import BottomToolBar from "../../components/post/BottomToolBar";
 import CsDropdown from "../../components/core/CSDropdown";
 import ImageViewer from "react-native-image-zoom-viewer";
+import CSButton from "../../components/core/Button";
+import PostsApi from "../../network/api/PostsApi";
+import UserApi from "../../network/api/UserApi";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import ClubsApi from "../../network/api/ClubsApi";
 
 const Container = styled.View`
   height: 100%;
@@ -23,6 +28,11 @@ const TopBarContainer = styled.View`
   background-color: white;
   align-items: center;
   padding: 0 16px;
+`;
+
+const ButtonArea = styled.View`
+  width: 96px;
+  height: 24px;
 `;
 
 const ContentArea = styled.View`
@@ -54,9 +64,42 @@ const CreatePostScreen = ({ navigation }: Props) => {
   const [isPublic, setPublic] = useState<boolean>(true);
   const [contentText, setContentText] = useState<string>("");
   const [imageList, setImageList] = useState<string[]>([]);
-  const [selectedClubId, setSelectedClubId] = useState<number | null>(null);
+  const [selectedClubId, setSelectedClubId] = useState<string | null>(null);
   const [isImageViewerOpen, setImageViewOpen] = useState<boolean>(false);
   const [viewerStartIdx, setViewerStartIdx] = useState<number>(0);
+  const [isNetworking, setNetworking] = useState<boolean>(false);
+  const [userClubs, setUserClubs] = useState<ClubInfoDto[]>([]);
+
+  useEffect(() => {
+    UserApi.getUserClubs(false)
+      .then(async (data) => {
+        let result = [];
+        for (let idx in data) {
+          const dto = await ClubsApi.getClubDetailByClubId(data[idx]);
+          result.push(dto);
+        }
+        setUserClubs(result);
+      });
+  }, []);
+
+  const handleCreate = () => {
+    if (!selectedClubId || !contentText) return;
+    setNetworking(true);
+    PostsApi.postPostInClub(selectedClubId, {
+      content: contentText,
+      isAnnouncement: false, // TODO: Announcement 만들어야 함
+      isPublic,
+      imageUrls: imageList
+    })
+      .then(() => {
+        setNetworking(false);
+        navigation.goBack();
+      })
+      .catch((e) => {
+        setNetworking(false);
+        Alert.alert("Fail to create", `Error: ${e.message}`);
+      });
+  };
 
   return (
     <Container>
@@ -69,16 +112,37 @@ const CreatePostScreen = ({ navigation }: Props) => {
             Create Post
           </CSText>
         </View>
+        <ButtonArea>
+          {!isNetworking &&
+          <CSButton color={Colors.GREEN_DEEP} text={"Create"} fill onPress={handleCreate} />
+          }
+          {isNetworking &&
+          <CSText fontType={FontType.REGULAR} fontSize={14}>
+            Creating...
+          </CSText>
+          }
+        </ButtonArea>
       </TopBarContainer>
       <ContentArea>
         <Contents>
-          <View style={{ width: '100%', display: "flex", flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
+          <View style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}>
             <CSText fontType={FontType.BOLD} fontSize={20}>
               Club
             </CSText>
-            <View style={{width: '75%'}}>
+            <View style={{ width: "75%" }}>
               <CsDropdown selectedId={selectedClubId} onSelect={setSelectedClubId}
-                          optionList={[{ value: 0, label: "hihi" }, { value: 1, label: "hihihi" }]} />
+                          optionList={userClubs.map(user => {
+                            return {
+                              value: user.id,
+                              label: user.clubname
+                            };
+                          })} />
             </View>
           </View>
           <View style={{ zIndex: -5, gap: 16 }}>
@@ -89,7 +153,7 @@ const CreatePostScreen = ({ navigation }: Props) => {
                       style={{ padding: 8 }} />
           </View>
           <ScrollView horizontal contentContainerStyle={{ columnGap: 8 }}>
-            {imageList.map((imageUri, idx) =><TouchableOpacity onPress={() => {
+            {imageList.map((imageUri, idx) => <TouchableOpacity onPress={() => {
               setViewerStartIdx(idx);
               setImageViewOpen(true);
             }}><Image source={{ uri: imageUri }} style={{ width: 120, height: 120 }} /></TouchableOpacity>)}
@@ -98,9 +162,10 @@ const CreatePostScreen = ({ navigation }: Props) => {
       </ContentArea>
       <BottomToolBar isPublic={isPublic} setPublic={setPublic} imageList={imageList} setImageList={setImageList} />
       <Modal visible={isImageViewerOpen} transparent={true}>
-        <ImageViewer index={viewerStartIdx} onCancel={() => setImageViewOpen(false)} imageUrls={imageList.map(imageUrl => {
-          return {url: imageUrl}
-        })} enableSwipeDown={true} onSwipeDown={() => setImageViewOpen(false)} />
+        <ImageViewer index={viewerStartIdx} onCancel={() => setImageViewOpen(false)}
+                     imageUrls={imageList.map(imageUrl => {
+                       return { url: imageUrl };
+                     })} enableSwipeDown={true} onSwipeDown={() => setImageViewOpen(false)} />
       </Modal>
     </Container>
   );
