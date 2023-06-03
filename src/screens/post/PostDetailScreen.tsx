@@ -7,6 +7,8 @@ import CSText, { FontType } from "../../components/core/CSText";
 import FeedPost from "../../components/core/FeedPost";
 import Comment from "../../components/post/Comment";
 import CommentInput from "../../components/post/CommentInput";
+import PostInfoDto from "../../model/PostInfoDto";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -36,9 +38,11 @@ const ScrollArea = styled.ScrollView`
 
 interface Props {
   navigation: any;
+  route: any
 }
 
-const PostDetailScreen = ({ navigation }: Props) => {
+const PostDetailScreen = ({ navigation, route }: Props) => {
+
   return (
     <Container>
       <TopBarContainer>
@@ -50,7 +54,7 @@ const PostDetailScreen = ({ navigation }: Props) => {
         </CSText>
       </TopBarContainer>
       <ScrollArea contentContainerStyle={{rowGap: 8}}>
-        <FeedPost />
+        <FeedPost post={route.params.post} club={route.params.club} />
         <Comment />
       </ScrollArea>
       <CommentInput />

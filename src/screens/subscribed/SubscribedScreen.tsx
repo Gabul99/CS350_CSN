@@ -49,8 +49,8 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
         {/*  <Empty />*/}
         {/*</Content>*/}
         <ScrollArea contentContainerStyle={{rowGap: 6}}>
-          <FeedPost rootNavigation={rootNavigation} />
-          <FeedPost rootNavigation={rootNavigation} />
+          {/*<FeedPost rootNavigation={rootNavigation} />*/}
+          {/*<FeedPost rootNavigation={rootNavigation} />*/}
         </ScrollArea>
       </>
       }

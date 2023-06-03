@@ -3,6 +3,7 @@ import PostInfoDto from "../../model/PostInfoDto";
 import UpdatePostDto from "../../model/UpdatePostDto";
 import CommentEntity from "../../model/CommentEntity";
 import CreatePostDto from "../../model/CreatePostDto";
+import PostType from "../../model/type/PostType";
 
 class PostsApi {
   static getPosts(lastPostId: string, lastCreatedAt: string) {
@@ -39,6 +40,10 @@ class PostsApi {
 
   static deletePostLikeByPostId(postId: string) {
     return deleteForEntity(`/posts/${postId}/likes`, {});
+  }
+
+  static getPostByClubId(clubId: string, postType: PostType, lastPostId?: string, lastCreatedAt?: string) {
+    return getForEntity<PostInfoDto[]>(`/clubs/${clubId}/posts`, {postType, limit: 10, lastPostId, lastCreatedAt})
   }
 
   static postPostInClub(clubId: string, data: CreatePostDto) {
