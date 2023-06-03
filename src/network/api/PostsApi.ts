@@ -6,7 +6,7 @@ import CreatePostDto from "../../model/CreatePostDto";
 import PostType from "../../model/type/PostType";
 
 class PostsApi {
-  static getPosts(lastPostId: string, lastCreatedAt: string) {
+  static getPosts(lastPostId?: string, lastCreatedAt?: string) {
     return getForEntity<PostInfoDto[]>('/posts', {limit: 10, lastPostId, lastCreatedAt});
   }
 
