@@ -67,7 +67,6 @@ interface Props {
 
 const CircularClubBadge = ({ club, selected, onPress }: Props) => {
   const isStarred = true;
-  const isAdmin = false;
 
   return (
     <Container>
@@ -85,7 +84,7 @@ const CircularClubBadge = ({ club, selected, onPress }: Props) => {
         <WithLocalSvg asset={require("../../assets/icons/ic_star.svg")} width={12} height={12} />
       </Star>
       }
-      {isAdmin &&
+      {club.isAdmin &&
       <Setting>
         <WithLocalSvg asset={require("../../assets/icons/ic_settings_filled.svg")} width={12} height={12} />
       </Setting>

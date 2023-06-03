@@ -1,5 +1,5 @@
 interface ClubInfoDto {
-  adminIds: string[];
+  isAdmin: boolean;
   memberCount: number;
   id: string;
   imageUrl: string;
