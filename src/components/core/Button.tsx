@@ -7,7 +7,7 @@ import { TouchableOpacityProps } from 'react-native';
 const StyledButton = styled.TouchableOpacity`
   display: flex;
   align-items: center;
-  justify-contents: center;
+  justify-content: center;
   border: 2px solid;
   border-radius: 3px;
   box-sizing: border-box;

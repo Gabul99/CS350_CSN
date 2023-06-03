@@ -1,12 +1,16 @@
-import React from "react";
-import { Text } from "react-native";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
-import ClubDetailScreen from "./ClubDetailScreen";
 import CSText, { FontType } from "../../components/core/CSText";
 import ClubSelectBar from "../../components/my_clubs/ClubSelectBar";
 import FeedPost from "../../components/core/FeedPost";
 import { WithLocalSvg } from "react-native-svg";
+import UserApi from "../../network/api/UserApi";
+import ClubsApi from "../../network/api/ClubsApi";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import PostInfoDto from "../../model/PostInfoDto";
+import PostsApi from "../../network/api/PostsApi";
+import PostType from "../../model/type/PostType";
 
 const Container = styled.View`
   height: 100%;
@@ -34,6 +38,7 @@ const ScrollArea = styled.ScrollView`
 const ContentArea = styled.View`
   position: relative;
   padding-bottom: 44px;
+  height: 100%;
 `;
 
 const FloatingCreatePost = styled.TouchableOpacity`
@@ -55,6 +60,33 @@ interface Props {
 }
 
 const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
+  const [selectedClubId, setSelectedClubId] = useState<string>();
+  const [userClubs, setUserClubs] = useState<ClubInfoDto[]>([]);
+  const [posts, setPosts] = useState<PostInfoDto[]>([]);
+
+  useEffect(() => {
+    UserApi.getUserClubs(false)
+      .then(async (data) => {
+        let result = [];
+        for (let idx in data) {
+          const dto = await ClubsApi.getClubDetailByClubId(data[idx]);
+          result.push(dto);
+        }
+        if (result.length > 0) setSelectedClubId(result[0].id);
+        setUserClubs(result);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!selectedClubId) return;
+    PostsApi.getPostByClubId(selectedClubId, PostType.ORDINARY)
+      .then(data => {
+        setPosts(data);
+      });
+  }, [selectedClubId]);
+
+  const selectedClub = userClubs.filter(club => club.id === selectedClubId)[0] ?? null;
+
   return (
       //<ClubDetailScreen></ClubDetailScreen>
     <Container>
@@ -65,10 +97,10 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
       </TopBarContainer>
       <ContentArea>
         <ScrollArea contentContainerStyle={{ rowGap: 6 }}>
-          <ClubSelectBar />
-          <FeedPost rootNavigation={rootNavigation} />
-          <FeedPost rootNavigation={rootNavigation} />
-          <FeedPost rootNavigation={rootNavigation} />
+          <ClubSelectBar clubList={userClubs} selectedClubId={selectedClubId} setSelectedClubId={setSelectedClubId} />
+          {selectedClub && posts.map(post => {
+            return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />
+          })}
         </ScrollArea>
         <FloatingCreatePost onPress={() => rootNavigation.navigate('CreatePost')}>
           <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={32} height={32} />

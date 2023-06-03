@@ -24,19 +24,18 @@ const IndicatorContainer = styled.View`
   overflow: hidden;
 `;
 
-const ImageSliderView = () => {
+interface Props {
+  imageList: string[]
+}
+
+const ImageSliderView = ({ imageList }: Props) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isImageViewerOpen, setImageViewOpen] = useState<boolean>(false);
   const [viewerStartIdx, setViewerStartIdx] = useState<number>(0);
 
-  const images = [
-    "https://picsum.photos/300/200", "https://picsum.photos/300"
-  ];
-
-
   return (
     <SliderContainer>
-      <SliderBox images={images} resizeMode={"contain"} ImageComponentStyle={{ height: "100%" }}
+      <SliderBox images={imageList} resizeMode={"contain"} ImageComponentStyle={{ height: "100%" }}
                  currentImageEmitter={(index: number) => setCurrentIndex(index)} dotStyle={{ width: 0, height: 0 }}
                  onCurrentImagePressed={(idx: number) => {
                    setViewerStartIdx(idx);
@@ -44,11 +43,11 @@ const ImageSliderView = () => {
                  }} />
       <IndicatorContainer>
         <CSText fontType={FontType.REGULAR} color={Colors.WHITE100} fontSize={14}>
-          {`${currentIndex + 1}/${images.length}`}
+          {`${currentIndex + 1}/${imageList.length}`}
         </CSText>
       </IndicatorContainer>
       <Modal visible={isImageViewerOpen} transparent={true}>
-        <ImageViewer index={viewerStartIdx} onCancel={() => setImageViewOpen(false)} imageUrls={images.map(imageUrl => {
+        <ImageViewer index={viewerStartIdx} onCancel={() => setImageViewOpen(false)} imageUrls={imageList.map(imageUrl => {
           return { url: imageUrl };
         })} enableSwipeDown={true} onSwipeDown={() => setImageViewOpen(false)} />
       </Modal>

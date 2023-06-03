@@ -38,6 +38,7 @@ function App(): JSX.Element {
           <Root.Screen name={'PostDetail'} component={PostDetailScreen} options={{headerShown: false}} />
           <Root.Screen name={'CreatePost'} component={CreatePostScreen} options={{headerShown: false}} />
           <Root.Screen name={'ClubDetail'} component={ClubDetailScreen} options={{headerShown: false}} />
+          <Root.Screen name={'CreateClub'} component={CreateClubScreen} options={{headerShown: false}} />
         </Root.Navigator>
       </NavigationContainer>
     </SafeAreaView>

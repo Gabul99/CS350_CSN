@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import { Image } from "react-native";
 
 const Container = styled.View`
   width: 54px;
@@ -57,16 +59,23 @@ const Setting = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-const CircularClubBadge = () => {
-  const isSelected = false;
+interface Props {
+  club: ClubInfoDto;
+  selected: boolean;
+  onPress: () => void;
+}
+
+const CircularClubBadge = ({ club, selected, onPress }: Props) => {
   const isStarred = true;
-  const isAdmin = false;
 
   return (
     <Container>
-      <TouchableArea>
+      <TouchableArea onPress={onPress}>
         <Background />
-        {isSelected &&
+        {!!club.imageUrl &&
+        <Image source={{ uri: club.imageUrl }} style={{ width: 54, height: 54, borderRadius: 27 }} />
+        }
+        {selected &&
         <SelectedIndicator />
         }
       </TouchableArea>
@@ -75,7 +84,7 @@ const CircularClubBadge = () => {
         <WithLocalSvg asset={require("../../assets/icons/ic_star.svg")} width={12} height={12} />
       </Star>
       }
-      {isAdmin &&
+      {club.isAdmin &&
       <Setting>
         <WithLocalSvg asset={require("../../assets/icons/ic_settings_filled.svg")} width={12} height={12} />
       </Setting>

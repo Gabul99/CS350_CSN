@@ -44,7 +44,6 @@ const BottomToolBar = ({ isPublic, setPublic, imageList, setImageList }: Props) 
         launchImageLibrary({ mediaType: "photo" }, res => {
           if (!res.assets) return;
           const asset = res.assets[0];
-          console.log(asset, asset.uri, asset.base64);
           const uuid = uuidV4();
           uploadAndGetURL(`post/${uuid}.png`, asset.uri)
             .then(url => {
