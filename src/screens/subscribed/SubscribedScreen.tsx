@@ -87,7 +87,7 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
       </>
       }
       {state !== SubscribedState.FEED &&
-        <ClubList rootNavigation={rootNavigation} />
+        <ClubList rootNavigation={rootNavigation} searchKeyword={searchKeyword} />
       }
     </Container>
   );

@@ -2,6 +2,10 @@ import { getForEntity, postForEntity } from "../HttpRequests";
 import ClubInfoDto from "../../model/ClubInfoDto";
 
 class ClubsApi {
+  static getClubs(lastClubName?: string, limit?: string) {
+    return getForEntity<string[]>('/clubs', {lastClubName, limit});
+  }
+
   static postClubs(clubName: string, description: string, imageUrl: string) {
     return postForEntity('/clubs', {clubname: clubName, description, canApply: true, imageUrl})
   }
