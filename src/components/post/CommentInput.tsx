@@ -4,6 +4,7 @@ import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { useHeaderHeight } from "react-native-screens/native-stack";
+import PostsApi from "../../network/api/PostsApi";
 
 const Container = styled.View`
   width: 100%;
@@ -31,15 +32,32 @@ const UploadIcon = styled.TouchableOpacity`
   height: 32px;
 `;
 
-const CommentInput = () => {
+interface Props {
+  postId: string;
+  refresh: () => void;
+}
+
+const CommentInput = ({ postId, refresh }: Props) => {
   const [inputValue, setInputValue] = useState<string>("");
+  const [isUploading, setUploading] = useState<boolean>(false);
+
+  const handleUpload = () => {
+    if (!inputValue) return;
+    setUploading(true);
+    PostsApi.postPostCommentsByPostId(postId, inputValue)
+      .then(() => {
+        setInputValue('');
+        setUploading(false);
+        refresh();
+      })
+  }
 
   return (
     <KeyboardAvoidingView behavior={"padding"} keyboardVerticalOffset={48}>
       <Container>
         <CommentTextInput value={inputValue} placeholder={"Add Comments..."}
-                          onChangeText={(value) => setInputValue(value)} />
-        <UploadIcon>
+          onChangeText={(value) => setInputValue(value)} />
+        <UploadIcon onPress={handleUpload} disabled={isUploading}>
           <WithLocalSvg asset={require("../../assets/icons/ic_arrow_up.svg")} width={32} height={32} fill={Colors.BLACK100} />
         </UploadIcon>
       </Container>

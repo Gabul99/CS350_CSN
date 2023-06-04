@@ -7,14 +7,14 @@ import { TouchableOpacityProps } from 'react-native';
 const StyledButton = styled.TouchableOpacity`
   display: flex;
   align-items: center;
-  justify-contents: center;
+  justify-content: center;
   border: 2px solid;
   border-radius: 3px;
   box-sizing: border-box;
   flex-grow: 1;
 `;
 
-interface Props extends TouchableOpacityProps{
+interface Props extends TouchableOpacityProps {
   size?: number;
   fill?: boolean;
   color: string;
@@ -22,17 +22,17 @@ interface Props extends TouchableOpacityProps{
   children?: ReactNode;
 }
 
-const CSButton = ({size = 14, fill = false, color, text, children, onPress, ...props}: Props) => {
+const CSButton = ({ size = 14, fill = false, color, text, children, onPress, ...props }: Props) => {
   const getFillColor = (fill: boolean, color: string) => {
-    if(fill) return color;
+    if (fill) return color;
     return Colors.WHITE100;
   };
   const getStrokeColor = (fill: boolean, color: string) => {
-    if(fill) return color;
+    if (fill) return color;
     return color;
   }
   const getFontColor = (fill: boolean, color: string) => {
-    if(fill){
+    if (fill) {
       switch (color) {
         case Colors.GREEN_DEEP:
           return Colors.BLACK100;
@@ -45,14 +45,14 @@ const CSButton = ({size = 14, fill = false, color, text, children, onPress, ...p
         return Colors.GREEN_DARK;
       case Colors.GREEN_DARK:
         return Colors.GREEN_DARK;
-        case Colors.GREEN_DEEP:
+      case Colors.GREEN_DEEP:
         return Colors.GREEN_DARK;
     }
   }
-  return <StyledButton style={{borderColor: getStrokeColor(fill, color), backgroundColor: getFillColor(fill, color)}} onPress={onPress}>
-      <CSText fontType={FontType.MEDIUM} color={getFontColor(fill, color)} fontSize={size}>{text}</CSText>
-      {children}
-    </StyledButton>
+  return <StyledButton style={{ borderColor: getStrokeColor(fill, color), backgroundColor: getFillColor(fill, color) }} onPress={onPress}>
+    <CSText fontType={FontType.MEDIUM} color={getFontColor(fill, color)} fontSize={size}>{text}</CSText>
+    {children}
+  </StyledButton>
 };
 
 export default CSButton;

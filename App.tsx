@@ -21,6 +21,7 @@ import MainLayout from "./src/screens/MainLayout";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import PostDetailScreen from "./src/screens/post/PostDetailScreen";
 import CreatePostScreen from "./src/screens/post/CreatePostScreen";
+import CreateClubScreen from "./src/screens/club/CreateClubScreen";
 import CreateScheduleScreen from "./src/screens/schedule/CreateScheduleScreen";
 import ScheduleDetailScreen from "./src/screens/schedule/ScheduleDetailScreen";
 
@@ -40,6 +41,7 @@ function App(): JSX.Element {
           <Root.Screen name={'CreatePost'} component={CreatePostScreen} options={{ headerShown: false }} />
           <Root.Screen name={'ScheduleDetail'} component={ScheduleDetailScreen} options={{ headerShown: false }} />
           <Root.Screen name={'CreateSchedule'} component={CreateScheduleScreen} options={{ headerShown: false }} />
+          <Root.Screen name={'CreateClub'} component={CreateClubScreen} options={{ headerShown: false }} />
         </Root.Navigator>
       </NavigationContainer>
     </SafeAreaView>

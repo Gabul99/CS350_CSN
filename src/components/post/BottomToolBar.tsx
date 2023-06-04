@@ -40,26 +40,25 @@ const BottomToolBar = ({ isPublic, setPublic, imageList, setImageList }: Props) 
   return (
     <Container>
       {!isLoading &&
-      <TouchableOpacity onPress={() => {
-        launchImageLibrary({ mediaType: "photo" }, res => {
-          if (!res.assets) return;
-          const asset = res.assets[0];
-          console.log(asset, asset.uri, asset.base64);
-          const uuid = uuidV4();
-          uploadAndGetURL(`post/${uuid}.png`, asset.uri)
-            .then(url => {
-              if (!url) return;
-              setImageList([...imageList, url]);
-            });
-        });
-      }}>
-        <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={32} height={32} />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          launchImageLibrary({ mediaType: "photo" }, res => {
+            if (!res.assets) return;
+            const asset = res.assets[0];
+            const uuid = uuidV4();
+            uploadAndGetURL(`post/${uuid}.png`, asset.uri)
+              .then(url => {
+                if (!url) return;
+                setImageList([...imageList, url]);
+              });
+          });
+        }}>
+          <WithLocalSvg asset={require("../../assets/icons/ic_add_photo.svg")} width={32} height={32} />
+        </TouchableOpacity>
       }
       {isLoading &&
-      <CSText fontType={FontType.REGULAR} fontSize={14} color={Colors.BLACK100}>
-        Uploading...
-      </CSText>
+        <CSText fontType={FontType.REGULAR} fontSize={14} color={Colors.BLACK100}>
+          Uploading...
+        </CSText>
       }
       <PublicButtonArea onPress={() => setPublic(!isPublic)}>
         <WithLocalSvg

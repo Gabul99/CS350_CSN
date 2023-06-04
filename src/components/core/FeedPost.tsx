@@ -4,6 +4,8 @@ import CSText, { FontType } from "./CSText";
 import ImageSliderView from "./ImageSlider";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
+import PostInfoDto from "../../model/PostInfoDto";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -62,45 +64,45 @@ const SmallButton = styled.TouchableOpacity`
 
 interface Props {
   rootNavigation?: any;
+  post: PostInfoDto;
+  club: ClubInfoDto;
 }
 
-const FeedPost = ({ rootNavigation }: Props) => {
+const FeedPost = ({ rootNavigation, post, club }: Props) => {
   return (
     <Container>
       <Header>
         <ImagePlace />
         <PostInfoArea>
-          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>KAIST Puple</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{club.clubname}</CSText>
           <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>
         </PostInfoArea>
       </Header>
       {!!rootNavigation ?
         <TouchablePostDescriptionArea onPress={() => {
-          if (rootNavigation) rootNavigation.navigate("PostDetail");
+          if (rootNavigation) rootNavigation.navigate("PostDetail", { post: post, club: club });
         }}>
-          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet,
-            consectetur
-            adipiscing elit. Donec at risus et lorem tincidunt</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{post.content}</CSText>
         </TouchablePostDescriptionArea>
         :
         <PostDescriptionArea>
-          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet,
-            consectetur
-            adipiscing elit. Donec at risus et lorem tincidunt</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{post.content}</CSText>
         </PostDescriptionArea>
       }
-      <ImageSliderView />
+      {post.imageUrls.length > 0 &&
+        <ImageSliderView imageList={post.imageUrls} />
+      }
       <LikeCommentBar>
         <SmallButton>
           <WithLocalSvg asset={require("../../assets/icons/ic_favorite.svg")} width={16} height={16} />
           <CSText fontType={FontType.REGULAR} fontSize={14}>
-            14
+            {post.likeCount}
           </CSText>
         </SmallButton>
         <SmallButton>
           <WithLocalSvg asset={require("../../assets/icons/ic_chat_bubble.svg")} width={16} height={16} />
           <CSText fontType={FontType.REGULAR} fontSize={14}>
-            2
+            {post.commentCount}
           </CSText>
         </SmallButton>
       </LikeCommentBar>
