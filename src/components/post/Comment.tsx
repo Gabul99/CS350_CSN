@@ -4,6 +4,7 @@ import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../core/CSText";
 import { WithLocalSvg } from "react-native-svg";
 import CommentEntity from "../../model/CommentEntity";
+import { fromNow } from "../../utils/dateFormat";
 
 const Container = styled.View`
   display: flex;
@@ -43,7 +44,7 @@ const Comment = ({ comment }: Props) => {
           {comment.authorname}
         </CSText>
         <CSText fontType={FontType.MEDIUM} fontSize={14} color={Colors.GREEN_SUB_TEXT}>
-          {comment.createdAt}
+          {fromNow(comment.createdAt)}
         </CSText>
         {isMyComment &&
         <DeleteIcon>

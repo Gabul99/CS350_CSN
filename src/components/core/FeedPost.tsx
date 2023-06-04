@@ -6,6 +6,7 @@ import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
 import PostInfoDto from "../../model/PostInfoDto";
 import ClubInfoDto from "../../model/ClubInfoDto";
+import { fromNow } from "../../utils/dateFormat";
 
 const Container = styled.View`
   width: 100%;
@@ -75,7 +76,7 @@ const FeedPost = ({ rootNavigation, post, club }: Props) => {
         <ImagePlace />
         <PostInfoArea>
           <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{`${club.clubname} - ${post.authorname}`}</CSText>
-          <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>{fromNow(post.createdAt)}</CSText>
         </PostInfoArea>
       </Header>
       {!!rootNavigation ?
