@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import ClubListItem from "../../components/subscribed/ClubListItem";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
 import { useIsFocused } from "@react-navigation/native";
+import ClubsApi from "../../network/api/ClubsApi";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -34,21 +36,38 @@ const FloatingCreatePost = styled.TouchableOpacity`
 
 interface Props {
   rootNavigation: any;
+  searchKeyword: string;
 }
 
-const ClubList = ({ rootNavigation }: Props) => {
+const ClubList = ({ rootNavigation, searchKeyword }: Props) => {
+  const [allClubs, setAllClubs] = useState<ClubInfoDto[]>([]);
+
   const focused = useIsFocused();
 
   useEffect(() => {
-    console.log('focused:', focused);
+    if (!focused) return;
+    ClubsApi.getClubs()
+      .then(async data => {
+        let result = [];
+        for (let idx in data) {
+          const dto = await ClubsApi.getClubDetailByClubId(data[idx]);
+          result.push(dto);
+        }
+        setAllClubs(result);
+      });
   }, [focused]);
 
   return (
     <Container>
       <ScrollArea>
-        <ClubListItem name={"KAIST_Puple"} />
+        {!searchKeyword && allClubs.map(club =>
+          <ClubListItem club={club} />
+        )
+        }
+        {searchKeyword && allClubs.filter(club => club.clubname.includes(searchKeyword))
+          .map(club => <ClubListItem club={club} />)}
       </ScrollArea>
-      <FloatingCreatePost onPress={() => rootNavigation.navigate('CreateClub')}>
+      <FloatingCreatePost onPress={() => rootNavigation.navigate("CreateClub")}>
         <WithLocalSvg asset={require("../../assets/icons/ic_myclubs.svg")} width={32} height={32} />
       </FloatingCreatePost>
     </Container>

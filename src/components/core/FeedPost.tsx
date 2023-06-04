@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "./CSText";
-import ImageSliderView from "./ImageSlider";
 import { Colors } from "../../style/Colors";
-import { WithLocalSvg } from "react-native-svg";
 import PostInfoDto from "../../model/PostInfoDto";
 import ClubInfoDto from "../../model/ClubInfoDto";
+import { fromNow } from "../../utils/dateFormat";
+import { Image, View } from "react-native";
+import ImageSliderView from "./ImageSlider";
+import { WithLocalSvg } from "react-native-svg";
 
 const Container = styled.View`
   width: 100%;
@@ -62,6 +64,13 @@ const SmallButton = styled.TouchableOpacity`
   gap: 4px;
 `;
 
+const Tag = styled.View`
+  padding: 4px 8px;
+  background-color: ${Colors.GREEN_DARK};
+  border-radius: 4px;
+  margin-left: auto;
+`;
+
 interface Props {
   rootNavigation?: any;
   post: PostInfoDto;
@@ -72,15 +81,24 @@ const FeedPost = ({ rootNavigation, post, club }: Props) => {
   return (
     <Container>
       <Header>
-        <ImagePlace />
+        <Image source={{ uri: club.imageUrl }} style={{ width: 32, height: 32, borderRadius: 16 }} />
         <PostInfoArea>
-          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{club.clubname}</CSText>
-          <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100}
+                  fontSize={14}>{`${club.clubname} - ${post.authorname}`}</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT}
+                  fontSize={14}>{fromNow(post.createdAt)}</CSText>
         </PostInfoArea>
+        {post.isAnnouncement &&
+        <Tag>
+          <CSText fontType={FontType.MEDIUM} fontSize={12} color={Colors.WHITE100}>
+            Announcement
+          </CSText>
+        </Tag>
+        }
       </Header>
       {!!rootNavigation ?
         <TouchablePostDescriptionArea onPress={() => {
-          if (rootNavigation) rootNavigation.navigate("PostDetail", {post: post, club: club});
+          if (rootNavigation) rootNavigation.navigate("PostDetail", { post: post, club: club });
         }}>
           <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{post.content}</CSText>
         </TouchablePostDescriptionArea>

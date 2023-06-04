@@ -9,6 +9,8 @@ interface PostInfoDto {
   isAnnouncement: boolean;
   isPublic: boolean;
   createdAt: string;
+  clubId: string;
+  authorname: string;
 }
 
 export default PostInfoDto;
