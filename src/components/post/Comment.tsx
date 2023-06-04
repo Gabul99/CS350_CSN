@@ -40,10 +40,10 @@ const Comment = ({ comment }: Props) => {
     <Container>
       <InfoBar>
         <CSText fontType={FontType.BOLD} fontSize={14}>
-          {comment.authorId}
+          {comment.authorname}
         </CSText>
         <CSText fontType={FontType.MEDIUM} fontSize={14} color={Colors.GREEN_SUB_TEXT}>
-          11 min ago
+          {comment.createdAt}
         </CSText>
         {isMyComment &&
         <DeleteIcon>

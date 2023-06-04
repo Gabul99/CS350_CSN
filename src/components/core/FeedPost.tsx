@@ -74,7 +74,7 @@ const FeedPost = ({ rootNavigation, post, club }: Props) => {
       <Header>
         <ImagePlace />
         <PostInfoArea>
-          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{club.clubname}</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{`${club.clubname} - ${post.authorname}`}</CSText>
           <CSText fontType={FontType.REGULAR} color={Colors.GREEN_SUB_TEXT} fontSize={14}>11 min ago</CSText>
         </PostInfoArea>
       </Header>
