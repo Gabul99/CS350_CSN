@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { GlobalContext } from "./GlobalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 
 enum HttpMethod {
   GET = "get",
@@ -62,7 +63,7 @@ const requestForEntity: <T>(
     let headers;
     const accessToken = await AsyncStorage.getItem('accessToken');
     if (!accessToken) {
-      const token = await axios.get("http://localhost:3000/auth/test");
+      const token = await axios.get(`http://${Platform.OS === 'ios' ? 'localhost' : '10.0.2.2'}:3000/auth/test`);
       testToken = token.data.accessToken;
       headers = {
         Authorization: `Bearer ${testToken}`
@@ -80,7 +81,7 @@ const requestForEntity: <T>(
       params,
       data,
       headers,
-      baseURL: "http://localhost:3000/"
+      baseURL: Platform.OS === 'ios' ? "http://localhost:3000/" : 'http://10.0.2.2:3000/'
       // paramsSerializer: arrayNoBrackets ? params => qs.stringify(params, { arrayFormat: 'repeat' }) : undefined,
     });
     return axiosResult.data;
