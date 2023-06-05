@@ -117,9 +117,10 @@ const CreateClubScreen = ({ navigation }: Props) => {
     ClubsApi.postClubs(name, description, imageUri)
       .then(() => {
         setNetworking(false);
-        navigation.dispatch(
-          StackActions.replace("PostDetail")
-        );
+        // navigation.dispatch(
+        //   StackActions.replace("PostDetail")
+        // );
+        navigation.goBack();
       })
       .catch((e) => {
         setNetworking(false);
