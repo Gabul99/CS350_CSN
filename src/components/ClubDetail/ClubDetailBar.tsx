@@ -109,7 +109,7 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
   useEffect(()=>{
     if(!focused) return;
     refresh();
-  }, [focused, state]);
+  }, [state]);
   refresh();
   // updateJoin();
   
@@ -178,7 +178,7 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
     <Container>
       <Header>
         <ImagePlaceBig>
-          <Image source={{ uri: club.imageUrl }} style={{ width: 96, height: 96, borderRadius: 48 }} />
+          <Image source={{ uri: clubDetail.imageUrl }} style={{ width: 96, height: 96, borderRadius: 48 }} />
         </ImagePlaceBig>
         <ClubInfoArea>
           <CSText fontType={FontType.BOLD} color={Colors.BLACK100} fontSize={24}>{clubDetail.clubname}</CSText>

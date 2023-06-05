@@ -55,6 +55,7 @@ const ScrollArea = styled.ScrollView`
 
 const ClubDetailScreen = ({ navigation, route }: Props) => {
   const selectedClub = route.params.selectedClub as ClubInfoDto;
+  const [club, setClub] = useState<ClubInfoDto>(selectedClub);
 
   const [clubState, setClubState] = useState<ClubMemberState>(ClubMemberState.GENERAL);
   const [state, setState] = useState<ClubDetailState>(ClubDetailState.GENERAL);
@@ -71,12 +72,17 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
 
   
   useEffect(() => {
+    console.log(focused);
     if (!focused) return;
-    PostsApi.getPostByClubId(selectedClub.id, PostType.ANNOUNCEMENT)
+    ClubsApi.getClubDetailByClubId(club.id)
+    .then(async (data) => {
+      setClub(data);
+    });
+    PostsApi.getPostByClubId(club.id, PostType.ANNOUNCEMENT)
         .then(data => {
           setAnnouncementPosts(data);
         })
-    PostsApi.getPostByClubId(selectedClub.id, PostType.ORDINARY)
+    PostsApi.getPostByClubId(club.id, PostType.ORDINARY)
       .then(data => {
         setPosts(data);
       });
@@ -84,9 +90,8 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
       UserApi.getUserClubs(true)
         .then(async (data) => {
           for (let idx in data) {
-            if (selectedClub.id === data[idx]) {
+            if (club.id === data[idx]) {
               setClubState(ClubMemberState.ADMIN);
-              console.log('admin set');
               return;
             }
           }
@@ -94,7 +99,7 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
             UserApi.getUserClubs(false)
               .then(async (data) => {
                 for (let idx in data) {
-                  if (selectedClub.id === data[idx]) {
+                  if (club.id === data[idx]) {
                     setClubState(ClubMemberState.MEMBER);
                     return;
                   }
@@ -107,16 +112,16 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
 
   return (
     <Container>
-      <ClubDetailTopBar clubId={selectedClub.id} clubDetail={selectedClub} state={state} setState={setState} clubState={clubState} navigation={navigation} updateClubInfo={updateClubInfo} />
+      <ClubDetailTopBar clubId={club.id} clubDetail={club} state={state} setState={setState} clubState={clubState} navigation={navigation} updateClubInfo={updateClubInfo} />
       {state === ClubDetailState.GENERAL &&
         <>
           <ScrollArea contentContainerStyle={{rowGap: 6}}>
-            <ClubDetailBar club={selectedClub} clubId={selectedClub.id} state={state} />
-            {selectedClub && announcementPosts.map(post => {
-              return <FeedPost rootNavigation={navigation} post={post} club={selectedClub} />
+            <ClubDetailBar club={club} clubId={club.id} state={state} />
+            {club && announcementPosts.map(post => {
+              return <FeedPost rootNavigation={navigation} post={post} club={club} />
             })}
-            {selectedClub && posts.map(post => {
-              return <FeedPost rootNavigation={navigation} post={post} club={selectedClub} />
+            {club && posts.map(post => {
+              return <FeedPost rootNavigation={navigation} post={post} club={club} />
             })}
           </ScrollArea>
         </>
@@ -124,14 +129,14 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
       {state === ClubDetailState.SETTING &&
         <>
           <ScrollArea>
-            <ClubSetting state={state} setState={setState} club={selectedClub} clubId={selectedClub.id} updateClubInfo={updateClubInfo} setUpdateClubInfo={setUpdateClubInfo}></ClubSetting>
-            <MemberList club={selectedClub}></MemberList>
+            <ClubSetting state={state} setState={setState} club={club} clubId={club.id} updateClubInfo={updateClubInfo} setUpdateClubInfo={setUpdateClubInfo}></ClubSetting>
+            <MemberList club={club}></MemberList>
           </ScrollArea>
         </>
       }
       {state === ClubDetailState.APPLIST &&
         <>
-          <ApplicationList club={selectedClub}/>
+          <ApplicationList club={club}/>
         </>
       }
 			
