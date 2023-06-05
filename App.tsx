@@ -22,6 +22,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import PostDetailScreen from "./src/screens/post/PostDetailScreen";
 import CreatePostScreen from "./src/screens/post/CreatePostScreen";
 import ClubDetailScreen from "./src/screens/my_clubs/ClubDetailScreen";
+import CreateClubScreen from "./src/screens/club/CreateClubScreen";
 
 const Root = createNativeStackNavigator();
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import FeedPost from "../../components/core/FeedPost";
 import styled from "styled-components/native";
@@ -9,6 +9,10 @@ import ClubDetailTopBar from "../../components/ClubDetail/ClubDetailTopBar";
 import ClubSetting from "../../components/ClubDetail/ClubSetting";
 import MemberList from "./MemberList";
 import ApplicationList from "./ApplicationList";
+import PostInfoDto from "../../model/PostInfoDto";
+import PostsApi from "../../network/api/PostsApi";
+import PostType from "../../model/type/PostType";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 export enum ClubMemberState {
   GENERAL,
@@ -24,6 +28,8 @@ export enum ClubDetailState {
 
 interface Props {
   navigation: any;
+  selectedClubId: string;
+  selectedClub: ClubInfoDto;
   // rootNavigation: any;
 }
 
@@ -44,9 +50,15 @@ const ScrollArea = styled.ScrollView`
   flex-direction: column;
 `;
 
-const ClubDetailScreen = ({ navigation }: Props) => {
+const ClubDetailScreen = ({ navigation, selectedClubId, selectedClub }: Props) => {
   const [clubState, setClubState] = useState<ClubMemberState>(ClubMemberState.ADMIN);
   const [state, setState] = useState<ClubDetailState>(ClubDetailState.GENERAL);
+  const [posts, setPosts] = useState<PostInfoDto[]>([]);
+
+  PostsApi.getPostByClubId(selectedClubId, PostType.ORDINARY)
+    .then(data => {
+      setPosts(data);
+    });
 
   return (
     <Container>
@@ -54,10 +66,10 @@ const ClubDetailScreen = ({ navigation }: Props) => {
       {state === ClubDetailState.GENERAL &&
         <>
           <ScrollArea contentContainerStyle={{rowGap: 6}}>
-            <ClubDetailBar></ClubDetailBar>
-            <FeedPost />
-            <FeedPost />
-            <FeedPost />
+            <ClubDetailBar club={selectedClub} />
+            {selectedClub && posts.map(post => {
+            return <FeedPost rootNavigation={navigation} post={post} club={selectedClub} />
+          })}
           </ScrollArea>
         </>
       }

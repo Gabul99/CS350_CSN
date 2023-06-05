@@ -1,5 +1,6 @@
-import { getForEntity, postForEntity } from "../HttpRequests";
+import { getForEntity, patchForEntity, postForEntity } from "../HttpRequests";
 import ClubInfoDto from "../../model/ClubInfoDto";
+import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
 
 class ClubsApi {
   static postClubs(clubName: string, description: string, imageUrl: string) {
@@ -8,6 +9,10 @@ class ClubsApi {
 
   static getClubDetailByClubId(clubId: string) {
     return getForEntity<ClubInfoDto>(`/clubs/${clubId}`, {});
+  }
+
+  static patchClubDetailByClubId(clubId: string, data: UpdateClubInfoDto) {
+    return patchForEntity(`/clubs/${clubId}`, data);
   }
 }
 

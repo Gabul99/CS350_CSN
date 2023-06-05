@@ -4,6 +4,7 @@ import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
 import CSButton from "../core/Button";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -48,8 +49,11 @@ const DetailDescriptionArea = styled.View`
   padding: 0 18px 12px 18px;
 `;
 
+interface Props {
+  club: ClubInfoDto;
+}
 
-const ClubDetailBar = () => {
+const ClubDetailBar = ({ club }: Props) => {
   const [subscribed, setSubscribed] = useState(false);
   const [joined, setJoin] = useState(2);
   // 0: cannot join 1: Joined 2: Joinable 3: Applied
