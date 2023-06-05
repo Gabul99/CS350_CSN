@@ -82,7 +82,7 @@ const FeedPost = ({ rootNavigation, post, club }: Props) => {
   return (
     <Container>
       <Header>
-        <TouchableOpacity onPress={() => rootNavigation.navigate('ClubDetail')}>
+        <TouchableOpacity onPress={() => rootNavigation.navigate('ClubDetail', {selectedClub: club})}>
           <Image source={{ uri: club.imageUrl }} style={{ width: 32, height: 32, borderRadius: 16 }} />
         </TouchableOpacity>
         <PostInfoArea>

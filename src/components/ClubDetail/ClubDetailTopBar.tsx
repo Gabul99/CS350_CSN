@@ -4,6 +4,8 @@ import { WithLocalSvg } from "react-native-svg";
 import { TouchableOpacity } from "react-native";
 import { ClubDetailState, ClubMemberState } from "../../screens/my_clubs/ClubDetailScreen";
 import CSText, { FontType } from "../core/CSText";
+import UserApi from "../../network/api/UserApi";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -24,24 +26,31 @@ const Icons = styled.View`
 `;
 
 interface Props {
-  clubName: string;
+  club: ClubInfoDto;
   clubState: ClubMemberState;
   state: ClubDetailState;
   navigation: any;
   setState: (value: ClubDetailState) => void;
 }
 
-const ClubDetailTopBar = ({ clubName, clubState, state, setState, navigation}: Props) => {
+const ClubDetailTopBar = ({ club, clubState, state, setState, navigation}: Props) => {
   const [starred, setStarred] = useState(false);
+  UserApi.getUserStarredClub()
+    .then(async (data) => {
+      if (club.id == data) {
+        setStarred(true);
+      }
+    });
+
   return (
     <Container>
       <TouchableOpacity onPress={() => 
         state === ClubDetailState.SETTING && setState(ClubDetailState.GENERAL) ||
         state === ClubDetailState.APPLIST && setState(ClubDetailState.SETTING) || 
-        state === ClubDetailState.GENERAL &&navigation.goBack()}>{/* TODO : go back */}
+        state === ClubDetailState.GENERAL && navigation.goBack()}>
         <WithLocalSvg asset={require("../../assets/icons/ic_arrow_back_ios.svg")} width={28} height={28} />
       </TouchableOpacity>
-      <CSText fontType={FontType.BOLD} fontSize={20}>{clubName}</CSText>
+      <CSText fontType={FontType.BOLD} fontSize={20}>{club.clubname}</CSText>
       <Icons>
         {clubState === ClubMemberState.MEMBER || clubState === ClubMemberState.ADMIN && state === ClubDetailState.GENERAL &&
           <TouchableOpacity onPress={() => setStarred(!starred)}>

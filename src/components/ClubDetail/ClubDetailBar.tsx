@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
 import CSButton from "../core/Button";
 import ClubInfoDto from "../../model/ClubInfoDto";
+import ClubsApi from "../../network/api/ClubsApi";
+import { Image } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+import UserApi from "../../network/api/UserApi";
+import { AxiosError } from "axios";
 
 const Container = styled.View`
   width: 100%;
@@ -56,10 +61,47 @@ interface Props {
 const ClubDetailBar = ({ club }: Props) => {
   const [subscribed, setSubscribed] = useState(false);
   const [joined, setJoin] = useState(2);
-  // 0: cannot join 1: Joined 2: Joinable 3: Applied
+  const [clubDetail, setClubDetail] = useState<ClubInfoDto>();
+  const focused = useIsFocused();
+  const clubId = 
+
+  
+  useEffect(() => {
+    if(!focused) return;
+    UserApi.getUserSubscriptions()
+      .then(data => {
+        for (let idx in data) {
+          if (club.id === data[idx]) {
+            setSubscribed(true);
+            return;
+          }
+        }
+      })
+  }, [focused]);
 
   const handleSubsButtonPress = () => {
-    setSubscribed(!subscribed);
+    if(subscribed){
+      console.log('presseds');
+      console.log(club.id);
+      UserApi.deleteUserSubscriptionsByClubId(club.id)
+        .then(() => {
+          setSubscribed(false);
+          console.log('unsubscribed');
+        })
+        .catch((err)=>{
+          console.error('login err', err);
+          const axiosError = err as AxiosError;
+          console.log(axiosError.code, axiosError.message, axiosError.status);
+        });
+    }
+    else{
+      console.log('pressedu');
+      UserApi.postUserSubscriptionsByClubId(club.id)
+        .then(() => {
+          setSubscribed(true);
+          console.log('subscribed');
+        });
+    }
   };
   const handleJoinButtonPress = () => {
     if(joined == 2) setJoin(3);
@@ -68,10 +110,12 @@ const ClubDetailBar = ({ club }: Props) => {
   return (
     <Container>
       <Header>
-        <ImagePlaceBig />
+        <ImagePlaceBig>
+          <Image source={{ uri: club.imageUrl }} style={{ width: 96, height: 96, borderRadius: 48 }} />
+        </ImagePlaceBig>
         <ClubInfoArea>
-          <CSText fontType={FontType.BOLD} color={Colors.BLACK100} fontSize={24}>KAIST Puple</CSText>
-          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>87 members</CSText>
+          <CSText fontType={FontType.BOLD} color={Colors.BLACK100} fontSize={24}>{club.clubname}</CSText>
+          <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{club.memberCount}</CSText>
           <ClubButtonArea>
             <CSButton 
               fill={joined==2}
@@ -89,7 +133,7 @@ const ClubDetailBar = ({ club }: Props) => {
         </ClubInfoArea>
       </Header>
       <DetailDescriptionArea>
-        <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at risus et lorem tincidunt laoreet. Nullam eget nunc ac tellus dictum convallis. </CSText>
+        <CSText fontType={FontType.REGULAR} color={Colors.BLACK100} fontSize={14}>{club.description}</CSText>
       </DetailDescriptionArea>
     </Container>
   );

@@ -14,12 +14,12 @@ class UserApi {
     return getForEntity<string[]>('/user/subscriptions', {});
   }
 
-  static postUserSubscriptions() {
-    return postForEntity('/user/subscriptions', {});
+  static postUserSubscriptionsByClubId(clubId: string) {
+    return postForEntity('/user/subscriptions', {clubId});
   }
 
-  static deleteUserSubscriptions() {
-    return deleteForEntity('/user/subscriptions', {});
+  static deleteUserSubscriptionsByClubId(clubId: string) {
+    return deleteForEntity('/user/subscriptions', {clubId});
   }
 
   static getUserApplications() {
