@@ -136,7 +136,7 @@ const CreateClubScreen = ({ navigation }: Props) => {
         </TouchableOpacity>
         <View style={{ marginRight: "auto" }}>
           <CSText fontType={FontType.BOLD} fontSize={24}>
-            Create Post
+            Create Club
           </CSText>
         </View>
         <ButtonArea>
