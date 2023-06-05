@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Platform, ScrollView, Text, View } from "react-native";
 import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
 import FeedPost from "../../components/core/FeedPost";
 import styled from "styled-components/native";
@@ -9,7 +9,7 @@ import { IntroView } from "../../components/login/IntroView";
 import { login, logout, getProfile as getKakaoProfile, unlink } from '@react-native-seoul/kakao-login';
 import { GlobalContext } from "../../network/GlobalContext";
 import CSText, { FontType } from "../../components/core/CSText";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export enum SubscribedState {
@@ -59,7 +59,7 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
       const token = await login();
       setResult(JSON.stringify(token));
 
-      const connect = await axios.get<{accessToken: string, refreshToken: string}>('http://localhost:3000/auth/kakao/native', {
+      const connect = await axios.get<{accessToken: string, refreshToken: string}>(`http://${Platform.OS === 'ios' ? 'localhost' : '10.0.2.2'}:3000/auth/kakao/native`, {
         params: {
           code: token.accessToken,
         },
@@ -75,6 +75,8 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
       setLoginStatus(true);
     } catch (err) {
       console.error('login err', err);
+      const axiosError = err as AxiosError;
+      console.log(axiosError.code, axiosError.message);
     }
   };
 

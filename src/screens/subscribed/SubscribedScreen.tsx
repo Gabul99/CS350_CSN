@@ -79,7 +79,7 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
         {subscribedClubIds.length !== 0 &&
         <ScrollArea contentContainerStyle={{rowGap: 6}}>
           {posts.map(post => {
-            const club = subscribedClubList[0]; // TODO: 수정 필요
+            const club = subscribedClubList.filter(item => item.id === post.clubId)[0];
             return <FeedPost rootNavigation={rootNavigation} post={post} club={club} />;
           })}
         </ScrollArea>
@@ -87,7 +87,7 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
       </>
       }
       {state !== SubscribedState.FEED &&
-        <ClubList rootNavigation={rootNavigation} />
+        <ClubList rootNavigation={rootNavigation} searchKeyword={searchKeyword} />
       }
     </Container>
   );

@@ -68,7 +68,10 @@ const SubscribeTopBar = ({ state, setState, searchKeyword, setSearchKeyword }: P
       }
       {state === SubscribedState.SEARCH &&
       <SearchBar searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword}
-                 onBack={() => setState(SubscribedState.FEED)} />
+                 onBack={() => {
+                   setState(SubscribedState.FEED);
+                   setSearchKeyword('');
+                 }} />
       }
       {state === SubscribedState.NAVIGATE &&
       <SearchContainer>

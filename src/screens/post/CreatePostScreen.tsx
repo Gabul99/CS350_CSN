@@ -56,6 +56,13 @@ const TextArea = styled.TextInput`
   background-color: #F5F9F9;
 `;
 
+const AnnouncementButtonArea = styled.TouchableOpacity`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+`;
+
 interface Props {
   navigation: any;
 }
@@ -69,6 +76,7 @@ const CreatePostScreen = ({ navigation }: Props) => {
   const [viewerStartIdx, setViewerStartIdx] = useState<number>(0);
   const [isNetworking, setNetworking] = useState<boolean>(false);
   const [userClubs, setUserClubs] = useState<ClubInfoDto[]>([]);
+  const [isAnnouncement, setAnnouncement] = useState<boolean>(false);
 
   useEffect(() => {
     UserApi.getUserClubs(false)
@@ -87,7 +95,7 @@ const CreatePostScreen = ({ navigation }: Props) => {
     setNetworking(true);
     PostsApi.postPostInClub(selectedClubId, {
       content: contentText,
-      isAnnouncement: false, // TODO: Announcement 만들어야 함
+      isAnnouncement, // TODO: Announcement 만들어야 함
       isPublic,
       imageUrls: imageList
     })
@@ -100,6 +108,8 @@ const CreatePostScreen = ({ navigation }: Props) => {
         Alert.alert("Fail to create", `Error: ${e.message}`);
       });
   };
+
+  const isAdminOfSelectedClub = userClubs.filter(club => club.id === selectedClubId).length > 0 && userClubs.filter(club => club.id === selectedClubId)[0].isAdmin;
 
   return (
     <Container>
@@ -145,6 +155,16 @@ const CreatePostScreen = ({ navigation }: Props) => {
                           })} />
             </View>
           </View>
+          {isAdminOfSelectedClub &&
+          <AnnouncementButtonArea onPress={() => setAnnouncement(!isAnnouncement)}>
+            <WithLocalSvg
+              asset={isAnnouncement ? require("../../assets/icons/ic_check_box.svg") : require("../../assets/icons/ic_check_box_blank.svg")}
+              width={20} height={20} />
+            <CSText fontType={FontType.MEDIUM} fontSize={16} color={isAnnouncement ? Colors.GREEN_DEEP : Colors.GREEN_DARK}>
+              announcement
+            </CSText>
+          </AnnouncementButtonArea>
+          }
           <View style={{ zIndex: -5, gap: 16 }}>
             <CSText fontType={FontType.BOLD} fontSize={20}>
               Content

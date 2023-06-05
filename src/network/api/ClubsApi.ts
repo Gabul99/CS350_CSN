@@ -3,6 +3,10 @@ import ClubInfoDto from "../../model/ClubInfoDto";
 import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
 
 class ClubsApi {
+  static getClubs(lastClubName?: string, limit?: string) {
+    return getForEntity<string[]>('/clubs', {lastClubName, limit});
+  }
+
   static postClubs(clubName: string, description: string, imageUrl: string) {
     return postForEntity('/clubs', {clubname: clubName, description, canApply: true, imageUrl})
   }

@@ -11,6 +11,7 @@ import ClubInfoDto from "../../model/ClubInfoDto";
 import PostInfoDto from "../../model/PostInfoDto";
 import PostsApi from "../../network/api/PostsApi";
 import PostType from "../../model/type/PostType";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   height: 100%;
@@ -63,6 +64,9 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
   const [selectedClubId, setSelectedClubId] = useState<string>();
   const [userClubs, setUserClubs] = useState<ClubInfoDto[]>([]);
   const [posts, setPosts] = useState<PostInfoDto[]>([]);
+  const [announcementPosts, setAnnouncementPosts] = useState<PostInfoDto[]>([]);
+
+  const focused = useIsFocused();
 
   useEffect(() => {
     UserApi.getUserClubs(false)
@@ -78,12 +82,20 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (!selectedClubId) return;
+    refresh();
+  }, [selectedClubId, focused]);
+
+  const refresh = () => {
+    if (!selectedClubId || !focused) return;
+    PostsApi.getPostByClubId(selectedClubId, PostType.ANNOUNCEMENT)
+      .then(data => {
+        setAnnouncementPosts(data);
+      })
     PostsApi.getPostByClubId(selectedClubId, PostType.ORDINARY)
       .then(data => {
         setPosts(data);
       });
-  }, [selectedClubId]);
+  }
 
   const selectedClub = userClubs.filter(club => club.id === selectedClubId)[0] ?? null;
 
@@ -98,6 +110,9 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
       <ContentArea>
         <ScrollArea contentContainerStyle={{ rowGap: 6 }}>
           <ClubSelectBar clubList={userClubs} selectedClubId={selectedClubId} setSelectedClubId={setSelectedClubId} />
+          {selectedClub && announcementPosts.map(post => {
+            return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />
+          })}
           {selectedClub && posts.map(post => {
             return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />
           })}

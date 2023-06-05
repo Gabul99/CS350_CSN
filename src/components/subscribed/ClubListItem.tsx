@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -26,16 +27,16 @@ const SubscribeButton = styled.TouchableHighlight<{isSelected: boolean}>`
 `;
 
 interface Props {
-  name: string;
+  club: ClubInfoDto;
 }
 
-const ClubListItem = ({ name }: Props) => {
+const ClubListItem = ({ club }: Props) => {
   const isSelected = false;
 
   return (
     <Container>
       <CSText fontType={FontType.MEDIUM} fontSize={18}>
-        {name}
+        {club.clubname}
       </CSText>
       <SubscribeButton isSelected={isSelected} onPress={() => {}} underlayColor={'rgba(256, 256, 256, 0.12)'}>
         <CSText fontType={FontType.MEDIUM} fontSize={18} color={isSelected ? Colors.GREEN_DARK : Colors.BLACK100}>

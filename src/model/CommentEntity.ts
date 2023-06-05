@@ -4,6 +4,7 @@ interface CommentEntity {
   authorId: string;
   content: string;
   createdAt: string;
+  authorname: string;
 }
 
 export default CommentEntity;
