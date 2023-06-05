@@ -87,6 +87,15 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
 
   const refresh = () => {
     if (!selectedClubId || !focused) return;
+    UserApi.getUserClubs(false)
+      .then(async (data) => {
+        let result = [];
+        for (let idx in data) {
+          const dto = await ClubsApi.getClubDetailByClubId(data[idx]);
+          result.push(dto);
+        }
+        setUserClubs(result);
+      });
     PostsApi.getPostByClubId(selectedClubId, PostType.ANNOUNCEMENT)
       .then(data => {
         setAnnouncementPosts(data);
