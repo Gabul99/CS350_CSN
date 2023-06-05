@@ -16,6 +16,7 @@ import ClubInfoDto from "../../model/ClubInfoDto";
 import UserApi from "../../network/api/UserApi";
 import ClubsApi from "../../network/api/ClubsApi";
 import { useIsFocused } from "@react-navigation/native";
+import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
 
 export enum ClubMemberState {
   GENERAL,
@@ -59,6 +60,12 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
   const [state, setState] = useState<ClubDetailState>(ClubDetailState.GENERAL);
   const [posts, setPosts] = useState<PostInfoDto[]>([]);
   const [announcementPosts, setAnnouncementPosts] = useState<PostInfoDto[]>([]);
+  const [updateClubInfo, setUpdateClubInfo] = useState<UpdateClubInfoDto>({
+    imageUrl: selectedClub.imageUrl,
+    clubname: selectedClub.clubname,
+    description: selectedClub.description,
+    canApply: selectedClub.canApply
+  });
 
   const focused = useIsFocused();
 
@@ -96,15 +103,15 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
           }
         });
       }
-    }, [focused]);
+    }, [focused, state]);
 
   return (
     <Container>
-      <ClubDetailTopBar club={selectedClub} state={state} setState={setState} clubState={clubState} navigation={navigation} />
+      <ClubDetailTopBar clubId={selectedClub.id} clubDetail={selectedClub} state={state} setState={setState} clubState={clubState} navigation={navigation} updateClubInfo={updateClubInfo} />
       {state === ClubDetailState.GENERAL &&
         <>
           <ScrollArea contentContainerStyle={{rowGap: 6}}>
-            <ClubDetailBar club={selectedClub} />
+            <ClubDetailBar club={selectedClub} clubId={selectedClub.id} state={state} />
             {selectedClub && announcementPosts.map(post => {
               return <FeedPost rootNavigation={navigation} post={post} club={selectedClub} />
             })}
@@ -117,7 +124,7 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
       {state === ClubDetailState.SETTING &&
         <>
           <ScrollArea>
-            <ClubSetting state={state} setState={setState} ></ClubSetting>
+            <ClubSetting state={state} setState={setState} club={selectedClub} updateClubInfo={updateClubInfo} setUpdateClubInfo={setUpdateClubInfo}></ClubSetting>
             <MemberList club={selectedClub}></MemberList>
           </ScrollArea>
         </>

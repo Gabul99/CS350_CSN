@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
@@ -10,6 +10,8 @@ import { useStorage } from "../../utils/useStorage";
 import "react-native-get-random-values";
 import { v4 as uuidV4 } from "uuid";
 import { launchImageLibrary } from "react-native-image-picker";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -118,15 +120,26 @@ const Option = styled.View`
 interface Props {
   state: ClubDetailState;
   setState: (value: ClubDetailState) => void;
+  club: ClubInfoDto;
+  updateClubInfo: UpdateClubInfoDto;
+  setUpdateClubInfo: (value: UpdateClubInfoDto) => void;
 }
 
 
-const ClubSetting = ({state, setState}: Props) => {
-  const [name, onChangeName] = React.useState('KAIST Puple');
-  const [description, onChangeDesc] = React.useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at risus et lorem tincidunt');
-  const [canApply, setCanApply] = useState(false);
-  const [imageUri, setImageUri] = useState('');
+const ClubSetting = ({state, setState, club, updateClubInfo, setUpdateClubInfo}: Props) => {
+  const [name, onChangeName] = React.useState(club.clubname);
+  const [description, onChangeDesc] = React.useState(club.description);
+  const [canApply, setCanApply] = useState(club.canApply);
+  const [imageUri, setImageUri] = useState(club.imageUrl);
   const { isLoading, uploadAndGetURL } = useStorage();
+  useEffect(() => {
+    setUpdateClubInfo({
+      clubname: name,
+      imageUrl: imageUri,
+      description: description,
+      canApply: canApply
+    })
+  }, [name, description, canApply, imageUri])
 
   return (
     <Container>
@@ -136,12 +149,9 @@ const ClubSetting = ({state, setState}: Props) => {
             <PropNameText>Loading</PropNameText>
           ): (
             <Image source={{ uri: imageUri }} style={{ width: 96, height: 96, borderRadius: 48 }} />)
-          ) : (
-            <PropNameText>Empty</PropNameText>
-          )}
+          ) : (<></>)}
           <EditImage>
             <TouchableOpacity onPress={() => {
-              console.log('running');
               launchImageLibrary({ mediaType: "photo" }, res => {
               if (!res.assets) return;
               const asset = res.assets[0];
@@ -151,7 +161,6 @@ const ClubSetting = ({state, setState}: Props) => {
                 .then(url => {
                   if (!url) return;
                   setImageUri(url);
-                  console.log(imageUri);
                 });
               });
             }}>

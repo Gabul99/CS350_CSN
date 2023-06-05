@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components/native";
 import { WithLocalSvg } from "react-native-svg";
 import { TouchableOpacity } from "react-native";
@@ -6,6 +6,9 @@ import { ClubDetailState, ClubMemberState } from "../../screens/my_clubs/ClubDet
 import CSText, { FontType } from "../core/CSText";
 import UserApi from "../../network/api/UserApi";
 import ClubInfoDto from "../../model/ClubInfoDto";
+import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
+import ClubsApi from "../../network/api/ClubsApi";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   width: 100%;
@@ -26,21 +29,39 @@ const Icons = styled.View`
 `;
 
 interface Props {
-  club: ClubInfoDto;
+  clubId: string;
+  clubDetail: ClubInfoDto;
   clubState: ClubMemberState;
   state: ClubDetailState;
   navigation: any;
+  updateClubInfo: UpdateClubInfoDto;
   setState: (value: ClubDetailState) => void;
 }
 
-const ClubDetailTopBar = ({ club, clubState, state, setState, navigation}: Props) => {
+const ClubDetailTopBar = ({ clubId, clubDetail, clubState, state, setState, navigation, updateClubInfo}: Props) => {
   const [starred, setStarred] = useState(false);
-  UserApi.getUserStarredClub()
+  const focused = useIsFocused();
+  // UserApi.getUserStarredClub()
+  //   .then(async (data) => {
+  //     if (clubId == data) {
+  //       setStarred(true);
+  //     }
+  //   });
+
+  const [club, updateClub] = useState<ClubInfoDto>(clubDetail);
+
+  const refresh = () => {
+    ClubsApi.getClubDetailByClubId(clubId)
     .then(async (data) => {
-      if (club.id == data) {
-        setStarred(true);
-      }
+      updateClub(data);
     });
+  };
+
+  useEffect(()=>{
+    if(!focused) return;
+    refresh();
+  }, [focused, state]);
+  refresh();
 
   return (
     <Container>
@@ -52,8 +73,11 @@ const ClubDetailTopBar = ({ club, clubState, state, setState, navigation}: Props
       </TouchableOpacity>
       <CSText fontType={FontType.BOLD} fontSize={20}>{club.clubname}</CSText>
       <Icons>
-        {clubState === ClubMemberState.MEMBER || clubState === ClubMemberState.ADMIN && state === ClubDetailState.GENERAL &&
-          <TouchableOpacity onPress={() => setStarred(!starred)}>
+        {(clubState === ClubMemberState.MEMBER || clubState === ClubMemberState.ADMIN) && state === ClubDetailState.GENERAL &&
+          <TouchableOpacity onPress={() => {
+            // post about stars ... (low priority)
+              setStarred(!starred)
+            }}>
             {starred &&
             <>
               <WithLocalSvg asset={require("../../assets/icons/ic_selected_stars.svg")} width={28} height={28} />
@@ -72,7 +96,11 @@ const ClubDetailTopBar = ({ club, clubState, state, setState, navigation}: Props
           </TouchableOpacity>
         }
         {state === ClubDetailState.SETTING &&
-          <TouchableOpacity onPress={() => {setState(ClubDetailState.GENERAL)}}>
+          <TouchableOpacity onPress={() => {
+              console.log(updateClubInfo);
+              ClubsApi.patchClubDetailByClubId(club.id, updateClubInfo)
+              .then(()=>setState(ClubDetailState.GENERAL));
+            }}>
             <WithLocalSvg asset={require("../../assets/icons/ic_check_circle.svg")} width={28} height={28} />
           </TouchableOpacity>
         }

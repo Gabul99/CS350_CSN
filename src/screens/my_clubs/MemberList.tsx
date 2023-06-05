@@ -19,7 +19,7 @@ interface Props{
 };
 
 const MemberList = ({ club }:Props) => {
-  if(!club) return;
+  if(!club) return <></>;
   const [members, setMembers] = useState<MemberDto[]>([]);
   const focused = useIsFocused();
 
