@@ -22,6 +22,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import PostDetailScreen from "./src/screens/post/PostDetailScreen";
 import CreatePostScreen from "./src/screens/post/CreatePostScreen";
 import CreateClubScreen from "./src/screens/club/CreateClubScreen";
+import CreateScheduleScreen from "./src/screens/schedule/CreateScheduleScreen";
+import ScheduleDetailScreen from "./src/screens/schedule/ScheduleDetailScreen";
 
 const Root = createNativeStackNavigator();
 
@@ -34,10 +36,12 @@ function App(): JSX.Element {
       />
       <NavigationContainer>
         <Root.Navigator initialRouteName={'Main'}>
-          <Root.Screen name={'Main'} component={MainLayout} options={{headerShown: false}} />
-          <Root.Screen name={'PostDetail'} component={PostDetailScreen} options={{headerShown: false}} />
-          <Root.Screen name={'CreatePost'} component={CreatePostScreen} options={{headerShown: false}} />
-          <Root.Screen name={'CreateClub'} component={CreateClubScreen} options={{headerShown: false}} />
+          <Root.Screen name={'Main'} component={MainLayout} options={{ headerShown: false }} />
+          <Root.Screen name={'PostDetail'} component={PostDetailScreen} options={{ headerShown: false }} />
+          <Root.Screen name={'CreatePost'} component={CreatePostScreen} options={{ headerShown: false }} />
+          <Root.Screen name={'CreateClub'} component={CreateClubScreen} options={{ headerShown: false }} />
+          <Root.Screen name={'ScheduleDetail'} component={ScheduleDetailScreen} options={{ headerShown: false }} />
+          <Root.Screen name={'CreateSchedule'} component={CreateScheduleScreen} options={{ headerShown: false }} />
         </Root.Navigator>
       </NavigationContainer>
     </SafeAreaView>
