@@ -124,14 +124,14 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
       {state === ClubDetailState.SETTING &&
         <>
           <ScrollArea>
-            <ClubSetting state={state} setState={setState} club={selectedClub} updateClubInfo={updateClubInfo} setUpdateClubInfo={setUpdateClubInfo}></ClubSetting>
+            <ClubSetting state={state} setState={setState} club={selectedClub} clubId={selectedClub.id} updateClubInfo={updateClubInfo} setUpdateClubInfo={setUpdateClubInfo}></ClubSetting>
             <MemberList club={selectedClub}></MemberList>
           </ScrollArea>
         </>
       }
       {state === ClubDetailState.APPLIST &&
         <>
-          <ApplicationList></ApplicationList>
+          <ApplicationList club={selectedClub}/>
         </>
       }
 			

@@ -12,6 +12,7 @@ import { v4 as uuidV4 } from "uuid";
 import { launchImageLibrary } from "react-native-image-picker";
 import ClubInfoDto from "../../model/ClubInfoDto";
 import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
+import ClubsApi from "../../network/api/ClubsApi";
 
 const Container = styled.View`
   width: 100%;
@@ -121,12 +122,13 @@ interface Props {
   state: ClubDetailState;
   setState: (value: ClubDetailState) => void;
   club: ClubInfoDto;
+  clubId: string;
   updateClubInfo: UpdateClubInfoDto;
   setUpdateClubInfo: (value: UpdateClubInfoDto) => void;
 }
 
 
-const ClubSetting = ({state, setState, club, updateClubInfo, setUpdateClubInfo}: Props) => {
+const ClubSetting = ({state, setState, club, clubId, updateClubInfo, setUpdateClubInfo}: Props) => {
   const [name, onChangeName] = React.useState(club.clubname);
   const [description, onChangeDesc] = React.useState(club.description);
   const [canApply, setCanApply] = useState(club.canApply);
@@ -140,6 +142,16 @@ const ClubSetting = ({state, setState, club, updateClubInfo, setUpdateClubInfo}:
       canApply: canApply
     })
   }, [name, description, canApply, imageUri])
+
+  useEffect(() => {
+    ClubsApi.getClubDetailByClubId(clubId)
+    .then(async (data) => {
+      onChangeName(data.clubname);
+      onChangeDesc(data.description);
+      setCanApply(data.canApply);
+      setImageUri(data.imageUrl);
+    })
+  }, [state]);
 
   return (
     <Container>

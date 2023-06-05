@@ -2,6 +2,7 @@ import { deleteForEntity, getForEntity, patchForEntity, postForEntity } from "..
 import ClubInfoDto from "../../model/ClubInfoDto";
 import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
 import MemberDto from "../../model/MemberDto";
+import ApplicationEntity from "../../model/ApplicationEntity";
 
 class ClubsApi {
   static getClubs(lastClubName?: string, limit?: string) {
@@ -30,6 +31,14 @@ class ClubsApi {
 
   static deleteClubMember(clubId: string, userId: String) {
     return deleteForEntity(`/clubs/${clubId}/members/${userId}`, {});
+  }
+
+  static getClubAppicationsByClubId(clubId: string) {
+    return getForEntity<ApplicationEntity[]>(`/clubs/${clubId}/application`, {});
+  }
+
+  static patchClubApplicationStatus(clubId: string, applicationId: string, status: string){
+    return patchForEntity<ApplicationEntity>(`/clubs/${clubId}/application/${applicationId}`, {status});
   }
 }
 

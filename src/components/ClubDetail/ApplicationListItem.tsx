@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import CSButton from "../core/Button";
+import ClubsApi from "../../network/api/ClubsApi";
 
 const Container = styled.View`
   width: 100%;
@@ -25,12 +26,18 @@ const ButtonArea = styled.View`
 `
 
 interface Props {
-  name: string;
-  isAd?: boolean;
+  userId: string;
+  clubId: string;
+  applicantId: string;
 }
 
-const ApplicationListItem = ({ name, isAd = false }: Props) => {
-  const [isDeleted, deleteMember] = React.useState(false);
+const ApplicationListItem = ({ userId, clubId, applicantId}: Props) => {
+  const [isDeleted, deleteMember] = useState(false);
+  const [name, setName] = useState('Dummy');
+
+  useEffect(() => {
+    //TODO : Get username from the application
+  }, []);
 
   return (
     <>
@@ -44,14 +51,20 @@ const ApplicationListItem = ({ name, isAd = false }: Props) => {
           fill={true}
           color={Colors.GREEN_DEEP}
           text="Accept"
-          onPress={()=>deleteMember(true)}
+          onPress={()=>{
+            ClubsApi.patchClubApplicationStatus(clubId, applicantId, 'ACCEPTED')
+            .then(()=>deleteMember(true))
+          }}
           size={12}
         ></CSButton>
         <CSButton 
           fill={true}
           color={Colors.GREEN_DARK}
           text="Deny"
-          onPress={()=>deleteMember(true)}
+          onPress={()=>{
+            ClubsApi.patchClubApplicationStatus(clubId, applicantId, 'REJECTED')
+            .then(()=>deleteMember(true))
+          }}
           size={12}
         ></CSButton>
       </ButtonArea>

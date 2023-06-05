@@ -129,7 +129,7 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
   const handleSubsButtonPress = () => {
     if(subscribed){
       console.log('presseds');
-      UserApi.deleteUserSubscriptionsByClubId(club.id)
+      UserApi.deleteUserSubscriptionsByClubId(clubId)
         .then(() => {
           setSubscribed(false);
           console.log('unsubscribed');
@@ -141,8 +141,8 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
         });
     }
     else{
-      console.log('pressedu');
-      UserApi.postUserSubscriptionsByClubId(club.id)
+      console.log('pressedu', clubId);
+      UserApi.postUserSubscriptionsByClubId(clubId)
         .then(() => {
           setSubscribed(true);
           console.log('subscribed');
