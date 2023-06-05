@@ -60,12 +60,13 @@ const Setting = styled.TouchableOpacity`
 `;
 
 interface Props {
+  rootNavigation: any;
   club: ClubInfoDto;
   selected: boolean;
   onPress: () => void;
 }
 
-const CircularClubBadge = ({ club, selected, onPress }: Props) => {
+const CircularClubBadge = ({ rootNavigation, club, selected, onPress }: Props) => {
   const isStarred = true;
 
   return (
@@ -85,7 +86,7 @@ const CircularClubBadge = ({ club, selected, onPress }: Props) => {
       </Star>
       }
       {club.isAdmin &&
-      <Setting>
+      <Setting onPress={() => rootNavigation.navigate('ClubDetail', {selectedClub: club})}>
         <WithLocalSvg asset={require("../../assets/icons/ic_settings_filled.svg")} width={12} height={12} />
       </Setting>
       }

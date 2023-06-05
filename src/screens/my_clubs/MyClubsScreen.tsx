@@ -118,7 +118,7 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
       </TopBarContainer>
       <ContentArea>
         <ScrollArea contentContainerStyle={{ rowGap: 6 }}>
-          <ClubSelectBar clubList={userClubs} selectedClubId={selectedClubId} setSelectedClubId={setSelectedClubId} />
+          <ClubSelectBar rootNavigation={rootNavigation} clubList={userClubs} selectedClubId={selectedClubId} setSelectedClubId={setSelectedClubId} />
           {selectedClub && announcementPosts.map(post => {
             return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />
           })}

@@ -21,18 +21,19 @@ const Container = styled.View`
 `;
 
 interface Props {
+  rootNavigation: any;
   clubList: ClubInfoDto[];
   selectedClubId: string | undefined;
   setSelectedClubId: (value: string) => void;
 }
 
-const ClubSelectBar = ({ clubList, selectedClubId, setSelectedClubId }: Props) => {
+const ClubSelectBar = ({ rootNavigation, clubList, selectedClubId, setSelectedClubId }: Props) => {
   return (
     <ScrollContainer>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Container>
           {clubList.map(club => {
-            return <CircularClubBadge club={club} selected={selectedClubId === club.id} onPress={() => setSelectedClubId(club.id)} />;
+            return <CircularClubBadge rootNavigation={rootNavigation} club={club} selected={selectedClubId === club.id} onPress={() => setSelectedClubId(club.id)} />;
           })}
         </Container>
       </ScrollView>
