@@ -1,6 +1,7 @@
-import { getForEntity, patchForEntity, postForEntity } from "../HttpRequests";
+import { deleteForEntity, getForEntity, patchForEntity, postForEntity } from "../HttpRequests";
 import ClubInfoDto from "../../model/ClubInfoDto";
 import UpdateClubInfoDto from "../../model/UpdateClubInfoDto";
+import MemberDto from "../../model/MemberDto";
 
 class ClubsApi {
   static getClubs(lastClubName?: string, limit?: string) {
@@ -17,6 +18,18 @@ class ClubsApi {
 
   static patchClubDetailByClubId(clubId: string, data: UpdateClubInfoDto) {
     return patchForEntity(`/clubs/${clubId}`, data);
+  }
+
+  static getClubMembersByClubId(clubId: string) {
+    return getForEntity<MemberDto[]>(`/clubs/${clubId}/members`, {});
+  }
+
+  static patchClubMember(clubId: string, userId: string, adminPrivilege: boolean) {
+    return patchForEntity(`/clubs/${clubId}/members/${userId}`, {adminPrivilege});
+  }
+
+  static deleteClubMember(clubId: string, userId: String) {
+    return deleteForEntity(`/clubs/${clubId}/members/${userId}`, {});
   }
 }
 

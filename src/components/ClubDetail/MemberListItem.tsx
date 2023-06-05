@@ -3,6 +3,9 @@ import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import CSButton from "../core/Button";
+import MemberDto from "../../model/MemberDto";
+import ClubsApi from "../../network/api/ClubsApi";
+import ClubInfoDto from "../../model/ClubInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -25,12 +28,13 @@ const ButtonArea = styled.View`
 `
 
 interface Props {
-  name: string;
-  isAd?: boolean;
+  club: ClubInfoDto;
+  member: MemberDto;
 }
 
-const MemberListItem = ({ name, isAd = false }: Props) => {
-  const [isAdmin, setIsAdmin] = React.useState(isAd);
+const MemberListItem = ({ club, member }: Props) => {
+  if(!member) return (<></>);
+  const [isAdmin, setIsAdmin] = React.useState(member.isAdmin);
   const [isDeleted, deleteMember] = React.useState(false);
 
   return (
@@ -38,21 +42,27 @@ const MemberListItem = ({ name, isAd = false }: Props) => {
     {!isDeleted && 
     <Container>
       <CSText fontType={FontType.MEDIUM} fontSize={14}>
-        {name}
+        {member.username}
       </CSText>
       <ButtonArea>
         <CSButton 
           fill={isAdmin}
           color={Colors.GREEN_DEEP}
           text={isAdmin?"Admin" : "Member"}
-          onPress={()=>setIsAdmin(!isAdmin)}
+          onPress={()=>{
+            ClubsApi.patchClubMember(club.id, member.userId, !isAdmin)
+            .then(() => setIsAdmin(!isAdmin));
+          }}
           size={12}
         ></CSButton>
         <CSButton 
           fill={true}
           color={Colors.GREEN_DARK}
           text="Pull Out"
-          onPress={()=>deleteMember(true)}
+          onPress={()=>{
+            ClubsApi.deleteClubMember(club.id, member.userId)
+            .then(() => deleteMember(true));
+          }}
           size={12}
         ></CSButton>
       </ButtonArea>

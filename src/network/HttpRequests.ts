@@ -28,7 +28,8 @@ export const deleteForEntity: <T>(url: string, params: any, arrayNoBrackets?: bo
   params: any,
   arrayNoBrackets?: boolean
 ) => {
-  return requestForEntity(HttpMethod.DELETE, url, params, null, arrayNoBrackets);
+  // return requestForEntity(HttpMethod.DELETE, url, params, null, arrayNoBrackets);
+  return requestForEntity(HttpMethod.DELETE, url, null, params, arrayNoBrackets);
 };
 
 export const postForEntity: <T>(url: string, data: any) => Promise<T> = (url: string, data: any) => {

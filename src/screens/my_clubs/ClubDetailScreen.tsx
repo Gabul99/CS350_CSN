@@ -118,7 +118,7 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
         <>
           <ScrollArea>
             <ClubSetting state={state} setState={setState} ></ClubSetting>
-            <MemberList></MemberList>
+            <MemberList club={selectedClub}></MemberList>
           </ScrollArea>
         </>
       }

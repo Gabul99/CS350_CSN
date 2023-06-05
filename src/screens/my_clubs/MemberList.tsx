@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import MemberListItem from "../../components/ClubDetail/MemberListItem";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import MemberDto from "../../model/MemberDto";
+import { useIsFocused } from "@react-navigation/native";
+import ClubsApi from "../../network/api/ClubsApi";
 
 const ScrollArea = styled.ScrollView`
   flex-grow: 1;
@@ -10,24 +14,28 @@ const ScrollArea = styled.ScrollView`
   gap: 6px;
 `;
 
-const MemberList = () => {
+interface Props{
+  club: ClubInfoDto
+};
+
+const MemberList = ({ club }:Props) => {
+  if(!club) return;
+  const [members, setMembers] = useState<MemberDto[]>([]);
+  const focused = useIsFocused();
+
+  useEffect(() => {
+    ClubsApi.getClubMembersByClubId(club.id)
+      .then(async (data) => {
+        console.log(data);
+        setMembers(data);
+      });
+  }, []);
+
   return (
     <ScrollArea>
-      <MemberListItem isAd={true} name={'이호연'} />
-      <MemberListItem isAd={true} name={'윤영일'} />
-      <MemberListItem isAd={true} name={'이희찬'} />
-      <MemberListItem name={'조민규'} />
-      <MemberListItem name={'최형진'} />
-      <MemberListItem name={'이호연'} />
-      <MemberListItem name={'윤영일'} />
-      <MemberListItem name={'이희찬'} />
-      <MemberListItem name={'조민규'} />
-      <MemberListItem name={'최형진'} />
-      <MemberListItem name={'이호연'} />
-      <MemberListItem name={'윤영일'} />
-      <MemberListItem name={'이희찬'} />
-      <MemberListItem name={'조민규'} />
-      <MemberListItem name={'최형진'} />
+      {members.length > 0 && members.map(member => {
+        return <MemberListItem club={club} member={member}/>;
+      })}
     </ScrollArea>
   );
 };

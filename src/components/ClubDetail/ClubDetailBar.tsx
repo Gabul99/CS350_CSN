@@ -63,7 +63,6 @@ const ClubDetailBar = ({ club }: Props) => {
   const [joined, setJoin] = useState(2);
   const [clubDetail, setClubDetail] = useState<ClubInfoDto>();
   const focused = useIsFocused();
-  const clubId = 
 
   
   useEffect(() => {
@@ -82,14 +81,13 @@ const ClubDetailBar = ({ club }: Props) => {
   const handleSubsButtonPress = () => {
     if(subscribed){
       console.log('presseds');
-      console.log(club.id);
       UserApi.deleteUserSubscriptionsByClubId(club.id)
         .then(() => {
           setSubscribed(false);
           console.log('unsubscribed');
         })
         .catch((err)=>{
-          console.error('login err', err);
+          console.error('Delete Subscription Error', err);
           const axiosError = err as AxiosError;
           console.log(axiosError.code, axiosError.message, axiosError.status);
         });
@@ -103,6 +101,7 @@ const ClubDetailBar = ({ club }: Props) => {
         });
     }
   };
+
   const handleJoinButtonPress = () => {
     if(joined == 2) setJoin(3);
   };
