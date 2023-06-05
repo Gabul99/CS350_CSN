@@ -61,6 +61,7 @@ const AnnouncementButtonArea = styled.TouchableOpacity`
   flex-direction: row;
   gap: 8px;
   align-items: center;
+  z-index: -5;
 `;
 
 interface Props {
@@ -145,7 +146,7 @@ const CreatePostScreen = ({ navigation }: Props) => {
             <CSText fontType={FontType.BOLD} fontSize={20}>
               Club
             </CSText>
-            <View style={{ width: "75%" }}>
+            <View style={{ width: "75%", zIndex: 100 }}>
               <CsDropdown selectedId={selectedClubId} onSelect={setSelectedClubId}
                           optionList={userClubs.map(user => {
                             return {
