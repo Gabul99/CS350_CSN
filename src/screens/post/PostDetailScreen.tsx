@@ -73,7 +73,7 @@ const PostDetailScreen = ({ navigation, route }: Props) => {
       </TopBarContainer>
       <ScrollArea contentContainerStyle={{rowGap: 8}}>
         <FeedPost post={post} club={route.params.club} />
-        {comments.map(comment => <Comment comment={comment} />)}
+        {comments.map(comment => <Comment comment={comment} refresh={refresh} />)}
       </ScrollArea>
       <CommentInput postId={post.id} refresh={refresh} />
     </Container>
