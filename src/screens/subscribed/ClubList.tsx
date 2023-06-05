@@ -61,11 +61,11 @@ const ClubList = ({ rootNavigation, searchKeyword }: Props) => {
     <Container>
       <ScrollArea>
         {!searchKeyword && allClubs.map(club =>
-          <ClubListItem club={club} />
+          <ClubListItem rootNavigation={rootNavigation} club={club} />
         )
         }
         {searchKeyword && allClubs.filter(club => club.clubname.includes(searchKeyword))
-          .map(club => <ClubListItem club={club} />)}
+          .map(club => <ClubListItem rootNavigation={rootNavigation} club={club} />)}
       </ScrollArea>
       <FloatingCreatePost onPress={() => rootNavigation.navigate("CreateClub")}>
         <WithLocalSvg asset={require("../../assets/icons/ic_myclubs.svg")} width={32} height={32} />

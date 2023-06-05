@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import ClubInfoDto from "../../model/ClubInfoDto";
+import CSButton from "../core/Button";
+import UserApi from "../../network/api/UserApi";
+import { TouchableOpacity } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 const Container = styled.View`
   width: 100%;
@@ -14,35 +18,69 @@ const Container = styled.View`
   justify-content: space-between;
   background-color: ${Colors.WHITE100};
 `;
-
-const SubscribeButton = styled.TouchableHighlight<{isSelected: boolean}>`
-  width: 108px;
-  height: 36px;
-  background-color: ${props => props.isSelected ? Colors.WHITE100 : Colors.GREEN_DEEP};
-  border-radius: 6px;
-  border: 1px solid ${props => props.isSelected ? Colors.GREEN_DARK : 'rgba(0, 0, 0, 0)'};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const BtnContainer = styled.View`
+  margin-left: auto;
+  width: 40%;
+  padding: 10px 0;
 `;
 
 interface Props {
+  rootNavigation?: any;
   club: ClubInfoDto;
 }
 
-const ClubListItem = ({ club }: Props) => {
-  const isSelected = false;
+const ClubListItem = ({ rootNavigation, club }: Props) => {
+  const [subscribed, setSubscribed] = useState(false);
+  const focused = useIsFocused();
+
+  useEffect(() => {
+    UserApi.getUserSubscriptions()
+    .then(async (data) => {
+      for (let idx in data){
+        if(club.id == data[idx]){
+          setSubscribed(true);
+          return;
+        }
+      }
+    })
+  }, [rootNavigation]);
+
+  const handleSubsButtonPress = () => {
+    if(subscribed){
+      console.log('presseds');
+      UserApi.deleteUserSubscriptionsByClubId(club.id)
+        .then(() => {
+          setSubscribed(false);
+          console.log('unsubscribed');
+        });
+    }
+    else{
+      console.log('pressedu');
+      UserApi.postUserSubscriptionsByClubId(club.id)
+        .then(() => {
+          setSubscribed(true);
+          console.log('subscribed');
+        });
+    }
+  };
 
   return (
     <Container>
-      <CSText fontType={FontType.MEDIUM} fontSize={18}>
-        {club.clubname}
-      </CSText>
-      <SubscribeButton isSelected={isSelected} onPress={() => {}} underlayColor={'rgba(256, 256, 256, 0.12)'}>
-        <CSText fontType={FontType.MEDIUM} fontSize={18} color={isSelected ? Colors.GREEN_DARK : Colors.BLACK100}>
-          {isSelected ? 'Subscribed' : 'Subscribe'}
+      <TouchableOpacity onPress={() => rootNavigation.navigate('ClubDetail', {selectedClub: club})}>
+        <CSText fontType={FontType.MEDIUM} fontSize={18}>
+          {club.clubname}
         </CSText>
-      </SubscribeButton>
+      </TouchableOpacity>
+      <BtnContainer>
+        <CSButton
+          size={18}
+          fill={!subscribed}
+          color={Colors.GREEN_DEEP}
+          text={subscribed ? 'Subscribed' : 'Subscribe'}
+          onPress={handleSubsButtonPress}
+        ></CSButton>
+      </BtnContainer>
+      
     </Container>
   );
 };
