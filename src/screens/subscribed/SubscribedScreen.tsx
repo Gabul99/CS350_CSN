@@ -80,6 +80,7 @@ const SubscribedScreen = ({ navigation, rootNavigation }: Props) => {
         <ScrollArea contentContainerStyle={{rowGap: 6}}>
           {posts.map(post => {
             const club = subscribedClubList.filter(item => item.id === post.clubId)[0];
+            if(!club) return;
             return <FeedPost rootNavigation={rootNavigation} post={post} club={club} />;
           })}
         </ScrollArea>
