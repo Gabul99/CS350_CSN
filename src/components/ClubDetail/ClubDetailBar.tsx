@@ -63,7 +63,7 @@ interface Props {
 
 const ClubDetailBar = ({ club, clubId , state}: Props) => {
   const [subscribed, setSubscribed] = useState(false);
-  const [joined, setJoin] = useState(2);
+  const [joined, setJoin] = useState(0);
   const [clubDetail, setClubDetail] = useState<ClubInfoDto>(club);
   const focused = useIsFocused();
 
@@ -80,7 +80,7 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
     UserApi.getUserApplications()
       .then(async (data)=>{
         for (let idx in data) {
-          if (clubId == data[idx].clubId){
+          if (data[idx].status == 'PENDING' && clubId == data[idx].clubId){
             setJoin(3);
             return;
           }
