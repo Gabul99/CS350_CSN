@@ -97,7 +97,6 @@ const ClubDetailTopBar = ({ clubId, clubDetail, clubState, state, setState, navi
         }
         {state === ClubDetailState.SETTING &&
           <TouchableOpacity onPress={() => {
-              console.log(updateClubInfo);
               ClubsApi.patchClubDetailByClubId(club.id, updateClubInfo)
               .then(()=>setState(ClubDetailState.GENERAL));
             }}>

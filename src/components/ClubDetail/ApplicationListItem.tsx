@@ -4,6 +4,7 @@ import CSText, { FontType } from "../core/CSText";
 import { Colors } from "../../style/Colors";
 import CSButton from "../core/Button";
 import ClubsApi from "../../network/api/ClubsApi";
+import UserApi from "../../network/api/UserApi";
 
 const Container = styled.View`
   width: 100%;
@@ -28,15 +29,21 @@ const ButtonArea = styled.View`
 interface Props {
   userId: string;
   clubId: string;
-  applicantId: string;
+  applicationId: string;
 }
 
-const ApplicationListItem = ({ userId, clubId, applicantId}: Props) => {
+const ApplicationListItem = ({ userId, clubId, applicationId}: Props) => {
   const [isDeleted, deleteMember] = useState(false);
   const [name, setName] = useState('Dummy');
 
   useEffect(() => {
-    //TODO : Get username from the application
+    console.log(userId);
+    UserApi.getUserInfoByUserId(userId)
+    .then(async (data) => {
+      console.log(data);
+      setName(data.username);
+      console.log('loaded');
+    })
   }, []);
 
   return (
@@ -52,7 +59,7 @@ const ApplicationListItem = ({ userId, clubId, applicantId}: Props) => {
           color={Colors.GREEN_DEEP}
           text="Accept"
           onPress={()=>{
-            ClubsApi.patchClubApplicationStatus(clubId, applicantId, 'ACCEPTED')
+            ClubsApi.patchClubApplicationStatus(clubId, applicationId, 'ACCEPTED')
             .then(()=>deleteMember(true))
           }}
           size={12}
@@ -62,7 +69,7 @@ const ApplicationListItem = ({ userId, clubId, applicantId}: Props) => {
           color={Colors.GREEN_DARK}
           text="Deny"
           onPress={()=>{
-            ClubsApi.patchClubApplicationStatus(clubId, applicantId, 'REJECTED')
+            ClubsApi.patchClubApplicationStatus(clubId, applicationId, 'REJECTED')
             .then(()=>deleteMember(true))
           }}
           size={12}

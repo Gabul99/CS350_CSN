@@ -109,7 +109,7 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
   useEffect(()=>{
     if(!focused) return;
     refresh();
-  }, [state]);
+  }, [focused, state]);
   refresh();
   // updateJoin();
   
@@ -128,11 +128,9 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
 
   const handleSubsButtonPress = () => {
     if(subscribed){
-      console.log('presseds');
       UserApi.deleteUserSubscriptionsByClubId(clubId)
         .then(() => {
           setSubscribed(false);
-          console.log('unsubscribed');
         })
         .catch((err)=>{
           console.error('Delete Subscription Error', err);
@@ -141,11 +139,9 @@ const ClubDetailBar = ({ club, clubId , state}: Props) => {
         });
     }
     else{
-      console.log('pressedu', clubId);
       UserApi.postUserSubscriptionsByClubId(clubId)
         .then(() => {
           setSubscribed(true);
-          console.log('subscribed');
         });
     }
   };

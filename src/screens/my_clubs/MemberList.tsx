@@ -26,7 +26,6 @@ const MemberList = ({ club }:Props) => {
   useEffect(() => {
     ClubsApi.getClubMembersByClubId(club.id)
       .then(async (data) => {
-        console.log(data);
         setMembers(data);
       });
   }, []);

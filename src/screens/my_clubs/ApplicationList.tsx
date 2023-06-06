@@ -31,7 +31,8 @@ const ApplicationList = ({ club }:Props) => {
   return (
     <ScrollArea>
       {applicants.length > 0 && applicants.map(application => {
-        return <ApplicationListItem userId={application.id} clubId={application.clubId} applicantId={application.applicantId} />
+        console.log(application);
+        return <ApplicationListItem userId={application.applicantId} clubId={application.clubId} applicationId={application.id} />
       })}
     </ScrollArea>
   );

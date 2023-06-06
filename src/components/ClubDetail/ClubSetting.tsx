@@ -144,6 +144,7 @@ const ClubSetting = ({state, setState, club, clubId, updateClubInfo, setUpdateCl
   }, [name, description, canApply, imageUri])
 
   useEffect(() => {
+    console.log('checkspamming');
     ClubsApi.getClubDetailByClubId(clubId)
     .then(async (data) => {
       onChangeName(data.clubname);
@@ -167,7 +168,6 @@ const ClubSetting = ({state, setState, club, clubId, updateClubInfo, setUpdateCl
               launchImageLibrary({ mediaType: "photo" }, res => {
               if (!res.assets) return;
               const asset = res.assets[0];
-              console.log(asset, asset.uri, asset.base64);
               const uuid = uuidV4();
               uploadAndGetURL(`club/${uuid}.png`, asset.uri)
                 .then(url => {

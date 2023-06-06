@@ -186,10 +186,8 @@ const CreateClubScreen = ({ navigation }: Props) => {
                 if (!res.assets) return;
                 const asset = res.assets[0];
                 const uuid = uuidV4();
-                console.log('uploading...');
                 uploadAndGetURL(`club/${uuid}.png`, asset.uri)
                   .then(url => {
-                    console.log(url);
                     if (!url) return;
                     setImageUri(url);
                   });

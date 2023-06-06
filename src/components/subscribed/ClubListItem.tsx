@@ -47,19 +47,15 @@ const ClubListItem = ({ rootNavigation, club }: Props) => {
 
   const handleSubsButtonPress = () => {
     if(subscribed){
-      console.log('presseds');
       UserApi.deleteUserSubscriptionsByClubId(club.id)
         .then(() => {
           setSubscribed(false);
-          console.log('unsubscribed');
         });
     }
     else{
-      console.log('pressedu');
       UserApi.postUserSubscriptionsByClubId(club.id)
         .then(() => {
           setSubscribed(true);
-          console.log('subscribed');
         });
     }
   };

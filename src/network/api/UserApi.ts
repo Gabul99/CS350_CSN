@@ -1,7 +1,12 @@
 import { deleteForEntity, getForEntity, postForEntity } from "../HttpRequests";
 import ApplicationEntity from "../../model/ApplicationEntity";
+import UserDto from "../../model/UserDto";
 
 class UserApi {
+  static getUserInfoByUserId(id: string){
+    return getForEntity<UserDto>('/user', {id});
+  }
+
   static getUserClubs(onlyManaging: boolean) {
     return getForEntity<string[]>('/user/clubs', {onlyManaging});
   }

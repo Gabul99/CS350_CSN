@@ -72,7 +72,6 @@ const ClubDetailScreen = ({ navigation, route }: Props) => {
 
   
   useEffect(() => {
-    console.log(focused);
     if (!focused) return;
     ClubsApi.getClubDetailByClubId(club.id)
     .then(async (data) => {
