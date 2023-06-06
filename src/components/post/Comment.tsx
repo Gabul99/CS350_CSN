@@ -5,6 +5,8 @@ import CSText, { FontType } from "../core/CSText";
 import { WithLocalSvg } from "react-native-svg";
 import CommentEntity from "../../model/CommentEntity";
 import { fromNow } from "../../utils/dateFormat";
+import PostsApi from "../../network/api/PostsApi";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   display: flex;
@@ -32,10 +34,31 @@ const DeleteIcon = styled.TouchableOpacity`
 
 interface Props {
   comment: CommentEntity;
+  refresh: () => void;
 }
 
-const Comment = ({ comment }: Props) => {
-  const isMyComment = true;
+const Comment = ({ comment, refresh }: Props) => {
+
+  const handleDelete = () => {
+    if (!comment.isAuthor) return;
+    Alert.alert('Delete comment', 'Do you really want to delete this comment?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: () => {
+          PostsApi.deletePostComments(comment.postId, comment.commentId)
+            .then(() => {
+              refresh();
+            });
+        }
+      }
+    ]);
+  }
+
+  console.log(comment);
 
   return (
     <Container>
@@ -46,8 +69,8 @@ const Comment = ({ comment }: Props) => {
         <CSText fontType={FontType.MEDIUM} fontSize={14} color={Colors.GREEN_SUB_TEXT}>
           {fromNow(comment.createdAt)}
         </CSText>
-        {isMyComment &&
-        <DeleteIcon>
+        {comment.isAuthor &&
+        <DeleteIcon onPress={handleDelete}>
           <WithLocalSvg asset={require("../../assets/icons/ic_delete.svg")} width={20} height={20} />
         </DeleteIcon>
         }

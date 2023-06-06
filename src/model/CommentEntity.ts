@@ -1,4 +1,5 @@
 interface CommentEntity {
+  isAuthor: boolean;
   commentId: string;
   postId: string;
   authorId: string;

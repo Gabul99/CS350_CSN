@@ -1,12 +1,9 @@
-import React, { useState, useContext } from "react";
-import { Platform, ScrollView, Text, View } from "react-native";
-import SubscribeTopBar from "../../components/subscribed/SubscribeTopBar";
-import FeedPost from "../../components/core/FeedPost";
+import React, { useContext, useState } from "react";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
-import Empty from "../../components/subscribed/Empty";
 import { Colors } from "../../style/Colors";
 import { IntroView } from "../../components/login/IntroView";
-import { login, logout, getProfile as getKakaoProfile, unlink } from '@react-native-seoul/kakao-login';
+import { login } from "@react-native-seoul/kakao-login";
 import { GlobalContext } from "../../network/GlobalContext";
 import CSText, { FontType } from "../../components/core/CSText";
 import axios, { AxiosError } from "axios";
@@ -47,6 +44,10 @@ const StyleButton = styled.Pressable`
   margin-top: 10px;
 `;
 
+const TestLoginWrapper = styled.Pressable`
+  padding: 8px 16px;
+`;
+
 const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }: Props) => {
   const [state, setState] = useState<SubscribedState>(SubscribedState.FEED);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
@@ -80,6 +81,18 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
     }
   };
 
+  const singInTestUser = async () => {
+    const connect = await axios.get<{accessToken: string, refreshToken: string}>(`http://${Platform.OS === 'ios' ? 'localhost' : '10.0.2.2'}:3000/auth/test`);
+    await AsyncStorage.setItem('accessToken', connect.data.accessToken);
+    await AsyncStorage.setItem('refreshToken', connect.data.refreshToken);
+
+    setAuth({
+      authToken: connect.data.accessToken,
+      refreshToken: connect.data.refreshToken,
+    })
+    setLoginStatus(true);
+  }
+
   return (
 
     <Container >
@@ -93,6 +106,11 @@ const LoginScreen = ({ navigation, rootNavigation, loginStatus, setLoginStatus }
           KAKAO Login
         </CSText>
       </StyleButton>
+      <TestLoginWrapper onPress={singInTestUser}>
+        <CSText fontType={FontType.REGULAR} fontSize={14}>
+          Test Login
+        </CSText>
+      </TestLoginWrapper>
     </Container>
   );
 };

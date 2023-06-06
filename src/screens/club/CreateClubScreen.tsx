@@ -117,9 +117,10 @@ const CreateClubScreen = ({ navigation }: Props) => {
     ClubsApi.postClubs(name, description, imageUri)
       .then(() => {
         setNetworking(false);
-        navigation.dispatch(
-          StackActions.replace("PostDetail")
-        );
+        // navigation.dispatch(
+        //   StackActions.replace("PostDetail")
+        // );
+        navigation.goBack();
       })
       .catch((e) => {
         setNetworking(false);
@@ -135,7 +136,7 @@ const CreateClubScreen = ({ navigation }: Props) => {
         </TouchableOpacity>
         <View style={{ marginRight: "auto" }}>
           <CSText fontType={FontType.BOLD} fontSize={24}>
-            Create Post
+            Create Club
           </CSText>
         </View>
         <ButtonArea>

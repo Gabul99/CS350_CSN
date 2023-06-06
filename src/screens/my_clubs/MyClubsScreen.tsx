@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../../components/core/CSText";
-import ClubSelectBar from "../../components/my_clubs/ClubSelectBar";
-import FeedPost from "../../components/core/FeedPost";
-import { WithLocalSvg } from "react-native-svg";
 import UserApi from "../../network/api/UserApi";
 import ClubsApi from "../../network/api/ClubsApi";
 import ClubInfoDto from "../../model/ClubInfoDto";
@@ -12,6 +9,9 @@ import PostInfoDto from "../../model/PostInfoDto";
 import PostsApi from "../../network/api/PostsApi";
 import PostType from "../../model/type/PostType";
 import { useIsFocused } from "@react-navigation/native";
+import ClubSelectBar from "../../components/my_clubs/ClubSelectBar";
+import FeedPost from "../../components/core/FeedPost";
+import { WithLocalSvg } from "react-native-svg";
 
 const Container = styled.View`
   height: 100%;
@@ -53,6 +53,17 @@ const FloatingCreatePost = styled.TouchableOpacity`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const EmptyArea = styled.View`
+  width: 100%;
+  height: 200px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Colors.WHITE100};
+  padding: 20px;
 `;
 
 interface Props {
@@ -99,17 +110,17 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
     PostsApi.getPostByClubId(selectedClubId, PostType.ANNOUNCEMENT)
       .then(data => {
         setAnnouncementPosts(data);
-      })
+      });
     PostsApi.getPostByClubId(selectedClubId, PostType.ORDINARY)
       .then(data => {
         setPosts(data);
       });
-  }
+  };
 
   const selectedClub = userClubs.filter(club => club.id === selectedClubId)[0] ?? null;
 
   return (
-      //<ClubDetailScreen></ClubDetailScreen>
+    //<ClubDetailScreen></ClubDetailScreen>
     <Container>
       <TopBarContainer>
         <CSText fontType={FontType.BOLD} fontSize={24}>
@@ -117,16 +128,29 @@ const MyClubsScreen = ({ navigation, rootNavigation }: Props) => {
         </CSText>
       </TopBarContainer>
       <ContentArea>
+        {userClubs.length === 0 &&
+        <EmptyArea>
+          <CSText fontType={FontType.MEDIUM} fontSize={18}>
+            You didn't join any clubs!
+          </CSText>
+          <CSText fontType={FontType.MEDIUM} fontSize={18}>
+            How about explore some clubs?
+          </CSText>
+        </EmptyArea>
+        }
+        {userClubs.length > 0 &&
         <ScrollArea contentContainerStyle={{ rowGap: 6 }}>
-          <ClubSelectBar rootNavigation={rootNavigation} clubList={userClubs} selectedClubId={selectedClubId} setSelectedClubId={setSelectedClubId} />
+          <ClubSelectBar rootNavigation={rootNavigation} clubList={userClubs} selectedClubId={selectedClubId}
+                         setSelectedClubId={setSelectedClubId} />
           {selectedClub && announcementPosts.map(post => {
-            return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />
+            return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />;
           })}
           {selectedClub && posts.map(post => {
-            return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />
+            return <FeedPost rootNavigation={rootNavigation} post={post} club={selectedClub} />;
           })}
         </ScrollArea>
-        <FloatingCreatePost onPress={() => rootNavigation.navigate('CreatePost')}>
+        }
+        <FloatingCreatePost onPress={() => rootNavigation.navigate("CreatePost")}>
           <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={32} height={32} />
         </FloatingCreatePost>
       </ContentArea>

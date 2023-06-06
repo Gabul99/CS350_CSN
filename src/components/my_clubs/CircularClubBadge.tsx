@@ -67,7 +67,7 @@ interface Props {
 }
 
 const CircularClubBadge = ({ rootNavigation, club, selected, onPress }: Props) => {
-  const isStarred = true;
+  const isStarred = false;
 
   return (
     <Container>

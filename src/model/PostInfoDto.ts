@@ -1,4 +1,5 @@
 interface PostInfoDto {
+  isAuthor: boolean;
   liked: boolean;
   likeCount: number;
   commentCount: number;
