@@ -46,11 +46,11 @@ const CalendarScreen = ({ navigation, rootNavigation }: Props) => {
   return (
     <Container>
       <CalendarTopBar state={state} setState={setState} />
-      <Calendar rootNavigation={rootNavigation} />
+      <Calendar rootNavigation={rootNavigation} state={state} />
       <FloatingCreateSchedule onPress={() => rootNavigation.navigate('CreateSchedule')}>
         <WithLocalSvg asset={require("../../assets/icons/ic_stylus.svg")} width={32} height={32} />
       </FloatingCreateSchedule>
     </Container>
   );
 };
-
+export default CalendarScreen;

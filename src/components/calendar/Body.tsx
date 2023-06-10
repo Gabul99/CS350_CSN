@@ -7,7 +7,13 @@ import divideArray from "../../utils/divideArray";
 import isSameObj from "../../utils/isSameObj";
 import CSText, { FontType } from "../core/CSText";
 import styled from "styled-components/native";
-import Schedule, { ISchedule } from "./Schedule";
+import Schedule from "./Schedule";
+import ScheduleInfoDto from "../../model/ScheduleInfoDto";
+import { CalendarState } from "../../screens/calendar/CalendarScreen";
+import SchedulesApi from '../../network/api/SchedulesApi';
+import ClubInfoDto from "../../model/ClubInfoDto";
+import UserApi from "../../network/api/UserApi";
+import ClubsApi from "../../network/api/ClubsApi";
 
 interface Props {
   year: number;
@@ -18,6 +24,7 @@ interface Props {
   moveToPreviousMonth: (month: number) => void;
   moveToSpecificYearAndMonth: (year: number, month: number) => void;
   rootNavigation: any;
+  state: CalendarState;
 }
 
 interface State {
@@ -90,13 +97,16 @@ const ScheduleContainer = styled.View`
 `;
 
 function Body({
-  year, month, date, today, moveToNextMonth, moveToPreviousMonth, rootNavigation
+  year, month, date, today, moveToNextMonth, moveToPreviousMonth, rootNavigation, state
 }: Props) {
   const [totalDays, setTotalDays] = useState([]);
   const [totalDaysByState, setTotalDaysByState] = useState<DayState | Object>({});
   const [week, setWeek] = useState(0);
   const [viewTotalDays, setViewTotalDays] = useState(true);
-  const [schedules, setSchedules] = useState<ISchedule[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleInfoDto[]>([]);
+  const [userClubs, setUserClubs] = useState<string[]>([]);
+
+  const USER_ID = '771f1dad-0df4-4552-9862-8ec8ab238e7f';
 
   useEffect(() => {
     getTotalDays();
@@ -104,20 +114,37 @@ function Body({
 
   useEffect(() => {
     totalDays.forEach((el, idx) => {
-      if (el.includes(date)) {
+      // @ts-ignore
+      if (el?.includes(date)) {
         setWeek(idx);
       }
     });
   }, [totalDays]);
 
   useEffect(() => {
-    // const getSchedule = async () => {
-    //   const res = await fetch("http://localhost:3000/schedules");
-    //   const data = await res.json();
-    //   setSchedules(data);
-    // };
+    if (state === CalendarState.JOINED) {
+      UserApi.getUserClubs(false)
+        .then(async (data) => {
+          let result = [];
+          for (let idx in data) {
+            const dto = await ClubsApi.getClubDetailByClubId(data[idx]);
+            result.push(dto);
+          }
+          const userClubIds = result.map((el) => el.id);
+          setUserClubs(userClubIds);
+        });
+    }
+    if (state === CalendarState.SUBSCRIBED) {
+      UserApi.getUserSubscriptions()
+        .then(async (data) => {
+          setUserClubs(data);
+        }).catch();
+    }
+  }, [state]);
+
+  useEffect(() => {
     getTotalSchedules();
-  }, []);
+  }, [month, userClubs, state]);
 
   const getTotalDays = () => {
     const previousMonthLastDate = new Date(year, month - 1, 0).getDate();
@@ -139,6 +166,7 @@ function Body({
     );
 
     setTotalDays(
+      // @ts-ignore
       divideArray([...previousDays, ...currentDays, ...nextDays], 7)
     );
 
@@ -157,39 +185,33 @@ function Body({
     });
   };
 
-  const getTotalSchedules = () => {
-    // TODO API Call
-    // getTotalSchedules
-    const totalSchedules = [
-      {
-        clubId: "123saf",
-        authorId: "123123",
-        name: "스터디",
-        startDttm: new Date(2023, 6, 1, 10, 0),
-        endDttm: new Date(2023, 7, 2, 12, 0),
-        isPublic: true,
-      },
-      {
-        clubId: "123saf", authorId: "123123",
-        name: "Test",
-        startDttm: new Date(2023, 6, 3, 10, 0),
-        endDttm: new Date(2023, 6, 3, 12, 0),
-        isPublic: false,
+  const getTotalSchedules = async () => {
+    let schedulesShown: ScheduleInfoDto[] = [];
+    if (state == CalendarState.MARKED) {
+      const totalSchedules = await SchedulesApi.getSchedulesUser();
+      schedulesShown = totalSchedules;
+    } else if (state == CalendarState.JOINED) {
+      const totalSchedules = await SchedulesApi.getSchedulesJoined(month)
+      for (let i = 0; i < userClubs.length; i++) {
+        schedulesShown = schedulesShown.concat(totalSchedules.scheduleData[userClubs[i]])
       }
-    ]
-    setSchedules(totalSchedules);
+    } else if (state == CalendarState.SUBSCRIBED) {
+      const totalSchedules = await SchedulesApi.getSchedulesSubscribed(month).then((res) => { console.log(res); return res }).catch(() => []);
+      for (let i = 0; i < userClubs.length; i++) {
+        schedulesShown = schedulesShown.concat(totalSchedules.scheduleData[userClubs[i]])
+      }
+    }
+
+    setSchedules(schedulesShown)
   }
 
   const getScheduleOfDay = (year: number, month: number, day: number) => {
     if (schedules.length === 0) return [];
-    const scheduleOfDay = schedules.filter((schedule) => {
-      const fullDateStart = new Date(year, month, day, 0, 0);
-      const fullDateEnd = new Date(year, month, day, 23, 59);
-      // console.log(
-      //   schedule.startDttm.toDateString(),
-      //   fullDate.toDateString()
-      // )
-      if (schedule.startDttm.getTime() <= fullDateEnd.getTime() && fullDateStart.getTime() <= schedule.endDttm.getTime()) {
+    const scheduleOfDay = schedules.filter((schedule: ScheduleInfoDto) => {
+      if (!schedule) return false
+      const fullDateStart = new Date(year, month - 1, day, 0, 0);
+      const fullDateEnd = new Date(year, month - 1, day, 23, 59);
+      if ((new Date(schedule.startDttm).getTime() <= fullDateEnd.getTime() && fullDateStart.getTime() <= new Date(schedule.endDttm).getTime())) {
         return schedule;
       }
     })

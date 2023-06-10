@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import { WithLocalSvg } from "react-native-svg";
 import { ScrollView, TouchableOpacity } from "react-native";
 import CSText, { FontType } from "../../components/core/CSText";
 import ScheduleSection from "../../components/core/ScheduleSection";
+import ScheduleInfoDto from "../../model/ScheduleInfoDto";
 
 const Container = styled.View`
   width: 100%;
@@ -34,9 +35,12 @@ const ScrollArea = styled.ScrollView`
 
 interface Props {
   navigation: any;
+  route: any;
 }
 
-const ScheduleDetailScreen = ({ navigation }: Props) => {
+const ScheduleDetailScreen = ({ navigation, route }: Props) => {
+  const schedule = route.params.schedule as ScheduleInfoDto;
+
   return (
     <Container>
       <TopBarContainer>
@@ -47,7 +51,7 @@ const ScheduleDetailScreen = ({ navigation }: Props) => {
           Schedule
         </CSText>
       </TopBarContainer>
-      <ScheduleSection />
+      <ScheduleSection schedule={schedule} />
     </Container >
   );
 };

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import styled from "styled-components/native";
+import { CalendarState } from "../../screens/calendar/CalendarScreen";
 import Body from "./Body";
 import Header from "./Header";
 
 interface Props {
   rootNavigation?: any;
+  state: CalendarState;
 }
 
 const CalendarContainer = styled.View`
@@ -14,7 +16,7 @@ const CalendarContainer = styled.View`
   background-color: #FFFFFF;
 `
 
-function Calendar({ rootNavigation }: Props) {
+function Calendar({ rootNavigation, state }: Props) {
   const DATE = new Date();
   const YEAR = DATE.getFullYear();
   const MONTH = DATE.getMonth() + 1;
@@ -65,6 +67,7 @@ function Calendar({ rootNavigation }: Props) {
         moveToPreviousMonth={moveToPreviousMonth}
         moveToSpecificYearAndMonth={moveToSpecificYearAndMonth}
         rootNavigation={rootNavigation}
+        state={state}
       />
     </CalendarContainer>
   );

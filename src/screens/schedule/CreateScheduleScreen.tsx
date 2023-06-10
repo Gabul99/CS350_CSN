@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Colors } from "../../style/Colors";
 import CSText, { FontType } from "../../components/core/CSText";
 import { WithLocalSvg } from "react-native-svg";
-import { Image, Modal, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Modal, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 import BottomToolBar from "../../components/post/BottomToolBar";
 import { v4 as uuidv4 } from "uuid";
 import CsDropdown from "../../components/core/CSDropdown";
 import ImageViewer from "react-native-image-zoom-viewer";
 import DateSelector from "../../components/calendar/DateSelector";
+import UserApi from "../../network/api/UserApi";
+import CSButton from "../../components/core/Button";
+import ClubsApi from "../../network/api/ClubsApi";
+import ClubInfoDto from "../../model/ClubInfoDto";
+import SchedulesApi from "../../network/api/SchedulesApi";
 
 const Container = styled.View`
   height: 100%;
@@ -49,20 +54,17 @@ const TextArea = styled.TextInput`
   background-color: #F5F9F9;
 `;
 
-const StyleButton = styled.TouchableOpacity`
-  width: 90px;
-  height: 20px;
-  background: #3DECAD;
-  border-radius: 5px;
-  align-items: center;
-  justify-content: center;
-`
+const ButtonArea = styled.View`
+  width: 96px;
+  height: 24px;
+`;
 
 interface Props {
   navigation: any;
 }
 
 const CreateScheduleScreen = ({ navigation }: Props) => {
+  const [userClubs, setUserClubs] = useState<ClubInfoDto[]>([]);
   const [isPublic, setPublic] = useState<boolean>(true);
   const [nameText, setNameText] = useState<string>("");
   const [contentText, setContentText] = useState<string>("");
@@ -71,8 +73,44 @@ const CreateScheduleScreen = ({ navigation }: Props) => {
   const [isImageViewerOpen, setImageViewOpen] = useState<boolean>(false);
   const [viewerStartIdx, setViewerStartIdx] = useState<number>(0);
 
+  const [isNetworking, setNetworking] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    UserApi.getUserClubs(false)
+      .then(async (data) => {
+        let result = [];
+        for (let idx in data) {
+          const dto = await ClubsApi.getClubDetailByClubId(data[idx]);
+          result.push(dto);
+        }
+        setUserClubs(result);
+      });
+  }, []);
+
+  const handleCreate = () => {
+    if (!selectedClubId || !nameText || !contentText) return;
+    setNetworking(true);
+    SchedulesApi.createSchedule({
+      clubId: selectedClubId.toString(),
+      authorId: '771f1dad-0df4-4552-9862-8ec8ab238e7f',
+      name: nameText,
+      description: contentText,
+      startDttm: startDate.toString(),
+      endDttm: endDate.toString(),
+      isPublic,
+      imageUrls: imageList
+    })
+      .then(() => {
+        setNetworking(false);
+        navigation.goBack();
+      })
+      .catch((e) => {
+        setNetworking(false);
+        Alert.alert("Fail to create", `Error: ${e.message}`);
+      });
+  }
 
   return (
     <Container>
@@ -87,9 +125,16 @@ const CreateScheduleScreen = ({ navigation }: Props) => {
             </CSText>
           </View>
         </View>
-        <StyleButton >
-          <CSText fontSize={14} fontType={FontType.REGULAR}> Create </CSText>
-        </StyleButton>
+        <ButtonArea>
+          {!isNetworking &&
+            <CSButton color={Colors.GREEN_DEEP} text={"Create"} fill onPress={handleCreate} />
+          }
+          {isNetworking &&
+            <CSText fontType={FontType.REGULAR} fontSize={14}>
+              Creating...
+            </CSText>
+          }
+        </ButtonArea>
       </TopBarContainer>
       <ContentArea>
         <Contents>
@@ -99,8 +144,13 @@ const CreateScheduleScreen = ({ navigation }: Props) => {
             </CSText>
             <View style={{ width: '75%' }}>
               <CsDropdown selectedId={selectedClubId} onSelect={setSelectedClubId}
-                // MyClubList 
-                optionList={[{ value: 0, label: "hihi" }, { value: 1, label: "hihihi" }]} />
+                // @ts-ignore
+                optionList={userClubs.map(user => {
+                  return {
+                    value: user.id,
+                    label: user.clubname
+                  };
+                })} />
             </View>
           </View>
           <View style={{ width: '100%', display: "flex", flexDirection: "row", justifyContent: 'space-between', alignItems: "center", zIndex: -5, }}>
