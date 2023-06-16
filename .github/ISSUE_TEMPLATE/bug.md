@@ -16,11 +16,6 @@ Describe the bug and environment
  - OS: [e.g. iOS8.1]
  - 모바일앱 Version: [e.g. 22]
 
-**Nutrition engine (please complete the following information):**
- - Env: [e.g. Dev, Stg, Prd]
- - 펌웨어 Version: [e.g. 22]
- - 디바이스앱 Version: [e.g. 22]
-
 Describe how to reproduce bug and results
 -----------------------------------------
 
